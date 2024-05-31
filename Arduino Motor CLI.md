@@ -1,5 +1,5 @@
 # Top Menu:
-- [Continuous Drive](#Continuous Drive) (speed[mm/s], direction)
+- [Continuous Drive](#continuous-drive) (speed[mm/s], direction)
 - [[#Move Set Distance]] set distance (distance, speed, direction)
 	- will drive motor set speed and distance
 - [[#Go Home]] - returns to initialized 0 steps position from boot up
