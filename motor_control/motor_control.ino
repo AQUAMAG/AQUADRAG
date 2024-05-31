@@ -1,18 +1,34 @@
 #include <AccelStepper.h>
 
-#define steps_per_rotation 20000
-#define mm_per_rotation 2
+constexpr float steps_per_rotation = 25000.0;
+constexpr float mm_per_rotation = 6.0;
 
 // Define the stepper and the pins it will use
 #define dirPin 8
 #define stepPin 9
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
 
-int motor_speed = 30;
+#define MAX_SPEED 500000
 
-void set_speed_mms(float mms) {
-  int steps_per_second = mms * steps_per_rotation / mm_per_rotation;
-  stepper.setSpeed(steps_per_second);
+float motor_speed = 1.0; // mm per second
+
+float mm_to_steps(float mm) {
+  return mm * steps_per_rotation / mm_per_rotation;
+}
+
+void print_debug_log() {
+  Serial.print("Current Position: ");
+  Serial.println(stepper.currentPosition());
+  Serial.println("Motor speed set to: ");
+  Serial.print(mm_to_steps(motor_speed));
+  Serial.println(" (steps/sec)");
+  Serial.print(motor_speed);
+  Serial.println(" (mm/sec)");
+  Serial.print("Current Speed: ");
+  Serial.print(stepper.speed());
+  Serial.println(" steps/sec");
+  Serial.print("Max speed: ");
+  Serial.println(MAX_SPEED);
 }
 
 
@@ -20,13 +36,12 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   // Set the maximum speed and acceleration
-  stepper.setMaxSpeed(300);  // this doesn't seem to limit speed set by setSpeed() 
+  stepper.setMaxSpeed(MAX_SPEED);
   stepper.setAcceleration(500);  // steps per second^2
 
   // Set initial speed
-  stepper.setSpeed(motor_speed);  // steps per second
-  Serial.print("Current Position: ");
-  Serial.println(stepper.currentPosition());
+  stepper.setSpeed(mm_to_steps(motor_speed));  // steps per second
+  print_debug_log();
 }
 
   bool motor_on = false;
@@ -39,9 +54,6 @@ void loop() {
     if (command.equals("stop")) {
       motor_on = false;
       Serial.println("Motor stopped.");
-      // Print the current position
-      Serial.print("Current Position: ");
-      Serial.println(stepper.currentPosition());
     }
     // Check for 'START' command
     else if (command.equals("start")) {
@@ -54,10 +66,14 @@ void loop() {
         String speedString = command.substring(indexOfSpace + 1);
         float speedValue = speedString.toFloat();
         if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-          motor_speed = speedValue;
-          Serial.print("Motor speed set to: ");
-          Serial.println(motor_speed);
-          stepper.setSpeed(static_cast<int>(motor_speed));
+          float mm = speedValue;
+          float steps = mm_to_steps(mm);
+          Serial.println("*****");
+          Serial.println(steps);
+          stepper.setSpeed(steps);
+          Serial.println("*****");
+          Serial.println(steps);
+          motor_speed = mm;
         } else {
           Serial.println("Invalid speed value.");
         }
@@ -76,6 +92,7 @@ void loop() {
         };
         Serial.print("Current Position: ");
         Serial.println(stepper.currentPosition());
+        stepper.setSpeed(motor_speed);
       } else {
         Serial.println("Invalid command format. Use 'MOVE <value>'.");
       }
@@ -83,6 +100,7 @@ void loop() {
     else {
       Serial.println("Unknown command.");
     }
+    print_debug_log();
   }
 
   if (motor_on) {
