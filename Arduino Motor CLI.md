@@ -35,4 +35,3 @@
 	- Set home in distance
 		- Asks distance
 		- Asks what direction to move
-	-
