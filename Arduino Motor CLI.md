@@ -1,9 +1,9 @@
 # Top Menu:
-- [Continuous Drive](#continuous-drive) (speed[mm/s], direction)
-- [Move Set Distance](#move-set-distance) set distance (distance, speed, direction)
+- [#Continuous Drive](#Continuous%20Drive) (speed[mm/s], direction)
+- [#Move Set Distance](#Move%20Set%20Distance) set distance (distance, speed, direction)
 	- will drive motor set speed and distance
-- [Go Home](#go-home) - returns to initialized 0 steps position from boot up
-- [Reset Home](#reset-home)
+- [#Go Home](#Go%20Home) - returns to initialized 0 steps position from boot up
+- [#Reset Home](#Reset%20Home)
 ## Continuous Drive:
 - Inputs:
 	- Speed in mm/sec
@@ -28,4 +28,4 @@
 	- Returns motor to the 0 setpoint that is either created when the system boots or when it is reset
 ## Reset Home:
 - User Selects from the following:
-	- 
+	-
