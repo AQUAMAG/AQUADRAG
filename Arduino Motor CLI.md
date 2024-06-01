@@ -1,8 +1,7 @@
 # Top Menu:
-- [Continuous Drive](#continuous-drive) (speed[mm/s], direction)
-- [Move Set Distance](#move-set-distance) set distance (distance, speed, direction)
-	- will drive motor set speed and distance
-- [Go Home](#go-home) - returns to initialized 0 steps position from boot up
+- [Continuous Drive](#continuous-drive) 
+- [Move Set Distance](#move-set-distance) 
+- [Go Home](#go-home) 
 - [Reset Home](#reset-home)
 ## Continuous Drive:
 - Inputs:
