@@ -1,6 +1,6 @@
 # Top Menu:
 - [Continuous Drive](#continuous-drive) 
-- [Move Set Distance](#move-set-distance) 
+- [Move a Set Distance](#move-set-distance) 
 - [Go Home](#go-home) 
 - [Reset Home](#reset-home)
 ## Continuous Drive:
