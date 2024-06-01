@@ -28,4 +28,11 @@
 	- Returns motor to the 0 setpoint that is either created when the system boots or when it is reset
 ## Reset Home:
 - User Selects from the following:
+	- Set home to current position
+	- Set Home in steps
+		- Asks how many steps
+		- Asks what direction move
+	- Set home in distance
+		- Asks distance
+		- Asks what direction to move
 	-
