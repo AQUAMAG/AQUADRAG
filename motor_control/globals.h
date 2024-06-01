@@ -8,8 +8,13 @@ constexpr float max_speed = steps_per_rotation * 2;
 
 float motor_speed_mms = 1.0; // mm per second
 
-bool running = false;
-bool move_position = false;
+enum MotorState {
+  RUNNING,
+  MOVE_POSITION,
+  STOPPED
+};
+
+MotorState currentState = STOPPED;
 
 // Define the stepper and the pins it will use
 #define dirPin 8

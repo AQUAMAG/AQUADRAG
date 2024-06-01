@@ -63,15 +63,25 @@ void loop() {
     print_debug_log();
   }
 
-  if (running) {
+  void loop() {
+  switch (currentState) {
+    case RUNNING:
     // Move the stepper motor continuously at the current speed
-    stepper.runSpeed();
-  } else if (move_position) {
-    // Move the motor until it reaches position
-    stepper.runSpeedToPosition();
-    if (stepper.distanceToGo() == 0) {
-      move_position = false;
-    }
+      stepper.runSpeed();
+      break;
+      
+    case MOVE_POSITION:
+      // Move the motor until it reaches position
+      if (stepper.distanceToGo() == 0) {
+        currentState = STOPPED;
+      } else {
+        stepper.runSpeedToPosition();
+      }
+      break;
+      
+    case STOPPED:
+      // Motor is stopped, do nothing or handle other tasks
+      break;
   }
 }
 

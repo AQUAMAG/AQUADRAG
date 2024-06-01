@@ -22,13 +22,12 @@ void print_debug_log() {
 }
 
 void stop() {
-  running = false;
-  move_position = false;
+  currentState = STOPPED;
   // stepper.setPinsInverted(true, false, false);
 }
 
 void start() {
-  running = true;
+  currentState = RUNNING;
 }
 
 void set_speed(float mm_per_second) {
@@ -40,6 +39,5 @@ void set_speed(float mm_per_second) {
 void move_to(long position) {
   stepper.moveTo(position);
   stepper.setSpeed(mm_to_steps(motor_speed_mms));
-  move_position = true;
-  running = false;
+  current_state = MOVE_POSITION;
 }
