@@ -10,6 +10,8 @@ void setup() {
 
   // Set initial speed
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
+  pinMode(enablePin, OUTPUT);
+  digitalWrite(enablePin, LOW);
   print_debug_log();
 }
 
@@ -57,14 +59,15 @@ void loop() {
         Serial.println("Invalid command format. Use 'MOVE <value>'.");
       }
     }
+
+    // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");
     }
     print_debug_log();
   }
 
-  void loop() {
-  switch (currentState) {
+  switch (current_state) {
     case RUNNING:
     // Move the stepper motor continuously at the current speed
       stepper.runSpeed();
@@ -73,7 +76,7 @@ void loop() {
     case MOVE_POSITION:
       // Move the motor until it reaches position
       if (stepper.distanceToGo() == 0) {
-        currentState = STOPPED;
+        current_state = STOPPED;
       } else {
         stepper.runSpeedToPosition();
       }

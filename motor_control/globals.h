@@ -14,9 +14,10 @@ enum MotorState {
   STOPPED
 };
 
-MotorState currentState = STOPPED;
+MotorState current_state = STOPPED;
 
 // Define the stepper and the pins it will use
-#define dirPin 8
-#define stepPin 9
+#define dirPin 5
+#define enablePin 8
+#define stepPin 2
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
