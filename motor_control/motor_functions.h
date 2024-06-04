@@ -36,16 +36,20 @@ void print_debug_log() {
   }
 }
 
-void stop() {
-  current_state = STOPPED;
-  // stepper.setPinsInverted(true, false, false);
-}
-
-void start() {
+void reset_direction() {
   float steps = mm_to_steps(motor_speed_mms);
   stepper.setSpeed(-steps);
   stepper.setSpeed(steps); // workaround for spinning wrong direction after move to 0 bug
+}
+
+void stop() {
+  current_state = STOPPED;
+  reset_direction();
+}
+
+void start() {
   current_state = RUNNING;
+  reset_direction();
 }
 
 void set_speed(float mm_per_second) {
@@ -58,4 +62,9 @@ void move_to(long position) {
   stepper.moveTo(position);
   stepper.setSpeed(mm_to_steps(motor_speed_mms));
   current_state = MOVE_POSITION;
+}
+
+void set_home(long position_mm) {
+  float position_steps = mm_to_steps(-position_mm);
+  stepper.setCurrentPosition(position_steps);
 }

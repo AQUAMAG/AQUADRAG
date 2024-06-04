@@ -33,6 +33,8 @@ void loop() {
       start();
       Serial.println("Motor started.");
     }
+
+    // Check for 'SPEED' command
     else if (command.startsWith("speed")) {
       int indexOfSpace = command.indexOf(' ');
       if (indexOfSpace != -1) {
@@ -48,6 +50,8 @@ void loop() {
         Serial.println("Invalid command format. Use 'SPEED <value>'.");
       }
     }
+
+    // Check for 'MOVE' command
     else if (command.startsWith("move")) {
       int indexOfSpace = command.indexOf(' ');
       if (indexOfSpace != -1) {
@@ -59,6 +63,24 @@ void loop() {
         Serial.println("Invalid command format. Use 'MOVE <value>'.");
       }
     }
+
+    // Check for 'SET' command
+    else if (command.startsWith("set")) {
+      int indexOfSpace = command.indexOf(' ');
+      if (indexOfSpace != -1) {
+        String distanceString = command.substring(indexOfSpace + 1);
+        float distanceValue = distanceString.toFloat();
+        if (distanceValue != 0.0 || distanceString == "0" || distanceString == "0.0") {
+          set_home(distanceValue);
+        } else {
+          Serial.print(distanceString);
+          Serial.println(" is an invalid distance value.");
+        }
+      } else {
+        set_home(0);
+      }
+    }
+    
 
     // todo setCurrentPosition(currentPosition);
     else {
@@ -76,7 +98,7 @@ void loop() {
     case MOVE_POSITION:
       // Move the motor until it reaches position
       if (stepper.distanceToGo() == 0) {
-        current_state = STOPPED;
+        stop();
       } else {
         stepper.runSpeedToPosition();
       }
