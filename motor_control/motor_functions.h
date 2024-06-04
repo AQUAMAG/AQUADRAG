@@ -42,7 +42,9 @@ void stop() {
 }
 
 void start() {
-  // stepper.setSpeed(mm_to_steps(motor_speed_mms));
+  float steps = mm_to_steps(motor_speed_mms);
+  stepper.setSpeed(-steps);
+  stepper.setSpeed(steps); // workaround for spinning wrong direction after move to 0 bug
   current_state = RUNNING;
 }
 
