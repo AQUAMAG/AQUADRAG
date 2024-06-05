@@ -17,6 +17,7 @@ void start() {
 }
 
 void speed(String command) {
+  //Serial.println(command);
   int indexOfSpace = command.indexOf(' ');
       if (indexOfSpace != -1) {
         String speedString = command.substring(indexOfSpace + 1);
