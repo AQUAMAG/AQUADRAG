@@ -1,5 +1,3 @@
-// globals.h
-
 #include <AccelStepper.h>
 
 constexpr float steps_per_rotation = 25000.0;
