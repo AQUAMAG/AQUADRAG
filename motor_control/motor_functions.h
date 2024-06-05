@@ -6,6 +6,23 @@ float mm_to_steps(float mm) {
   return mm * steps_per_rotation / mm_per_rotation;
 }
 
+void set_speed(float mm_per_second) {
+  float steps = mm_to_steps(mm_per_second);
+  stepper.setSpeed(steps);
+  motor_speed_mms = mm_per_second;
+}
+
+void move_to(long position) {
+  stepper.moveTo(position);
+  stepper.setSpeed(mm_to_steps(motor_speed_mms));
+  current_state = MOVE_POSITION;
+}
+
+void set_home(long position_mm) {
+  float position_steps = mm_to_steps(-position_mm);
+  stepper.setCurrentPosition(position_steps);
+}
+
 void print_debug_log() {
   Serial.print("Position: ");
   Serial.println(stepper.currentPosition());
@@ -43,31 +60,6 @@ void reset_direction() {
   // print_debug_log();
 }
 
-void stop_motor() {
-  reset_direction();
-  stepper.stop();
-  current_state = STOPPED;
-}
 
-void start() {
-  // print_debug_log();
-  reset_direction();
-  current_state = RUNNING;
-}
 
-void set_speed(float mm_per_second) {
-  float steps = mm_to_steps(mm_per_second);
-  stepper.setSpeed(steps);
-  motor_speed_mms = mm_per_second;
-}
 
-void move_to(long position) {
-  stepper.moveTo(position);
-  stepper.setSpeed(mm_to_steps(motor_speed_mms));
-  current_state = MOVE_POSITION;
-}
-
-void set_home(long position_mm) {
-  float position_steps = mm_to_steps(-position_mm);
-  stepper.setCurrentPosition(position_steps);
-}

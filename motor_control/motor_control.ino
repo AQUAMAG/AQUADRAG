@@ -1,4 +1,4 @@
-#include "motor_functions.h"
+#include "motor_commands.h"
 #include <AccelStepper.h>
 
 void setup() {
@@ -27,64 +27,33 @@ void loop() {
     // Check for 'STOP' command
     if (command.equals("stop")) {
       stop_motor();
-      Serial.println("Motor stopped.");
     }
+
     // Check for 'Print' command
     else if (command.equals("print")) {
       print_debug_log();
     }
+
     // Check for 'START' command
     else if (command.equals("start")) {
       start();
-      Serial.println("Motor started.");
-      print_debug_log();
+      
     }
 
     // Check for 'SPEED' command
     else if (command.startsWith("speed")) {
-      int indexOfSpace = command.indexOf(' ');
-      if (indexOfSpace != -1) {
-        String speedString = command.substring(indexOfSpace + 1);
-        float speedValue = speedString.toFloat();
-        if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-          set_speed(speedValue);
-        } else {
-          Serial.print(speedString);
-          Serial.println(" is an invalid speed value.");
-        }
-      } else {
-        Serial.println("Invalid command format. Use 'SPEED <value>'.");
+      speed(command);
       }
-    }
+
 
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {
-      int indexOfSpace = command.indexOf(' ');
-      if (indexOfSpace != -1) {
-        String positionString = command.substring(indexOfSpace + 1);
-        long position = positionString.toInt();
-        move_to(position);
-        // stepper.setSpeed(motor_speed);
-      } else {
-        Serial.println("Invalid command format. Use 'MOVE <value>'.");
-      }
+      move(command);
     }
 
     // Check for 'SET' command
     else if (command.startsWith("set")) {
-      int indexOfSpace = command.indexOf(' ');
-      if (indexOfSpace != -1) {
-        String distanceString = command.substring(indexOfSpace + 1);
-        float distanceValue = distanceString.toFloat();
-        if (distanceValue != 0.0 || distanceString == "0" || distanceString == "0.0") {
-          set_home(distanceValue);
-        } else {
-          Serial.print(distanceString);
-          Serial.println(" is an invalid distance value.");
-        }
-      } else {
-        set_home(0);
-      }
+      set(command);
     }
     
 
