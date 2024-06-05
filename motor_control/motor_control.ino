@@ -1,4 +1,5 @@
 #include "motor_functions.h"
+#include <AccelStepper.h>
 
 void setup() {
   // put your setup code here, to run once:
@@ -25,13 +26,18 @@ void loop() {
 
     // Check for 'STOP' command
     if (command.equals("stop")) {
-      stop();
+      stop_motor();
       Serial.println("Motor stopped.");
+    }
+    // Check for 'Print' command
+    else if (command.equals("print")) {
+      print_debug_log();
     }
     // Check for 'START' command
     else if (command.equals("start")) {
       start();
       Serial.println("Motor started.");
+      print_debug_log();
     }
 
     // Check for 'SPEED' command
@@ -93,12 +99,14 @@ void loop() {
     case RUNNING:
     // Move the stepper motor continuously at the current speed
       stepper.runSpeed();
+
       break;
       
     case MOVE_POSITION:
       // Move the motor until it reaches position
       if (stepper.distanceToGo() == 0) {
-        stop();
+        stop_motor();
+        
       } else {
         stepper.runSpeedToPosition();
       }

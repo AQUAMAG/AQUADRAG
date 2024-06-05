@@ -26,11 +26,11 @@ void print_debug_log() {
     case RUNNING:
       Serial.println("RUNNING");
       break;
-      
+
     case MOVE_POSITION:
       Serial.println("MOVE_POSITION");
       break;
-      
+
     case STOPPED:
       Serial.println("STOPPED");
   }
@@ -38,18 +38,21 @@ void print_debug_log() {
 
 void reset_direction() {
   float steps = mm_to_steps(motor_speed_mms);
-  stepper.setSpeed(-steps);
-  stepper.setSpeed(steps); // workaround for spinning wrong direction after move to 0 bug
+  stepper.setSpeed(steps);  // workaround for spinning wrong direction after move to 0 bug
+  //stepper.setSpeed(-steps);
+  // print_debug_log();
 }
 
-void stop() {
-  current_state = STOPPED;
+void stop_motor() {
   reset_direction();
+  stepper.stop();
+  current_state = STOPPED;
 }
 
 void start() {
-  current_state = RUNNING;
+  // print_debug_log();
   reset_direction();
+  current_state = RUNNING;
 }
 
 void set_speed(float mm_per_second) {
