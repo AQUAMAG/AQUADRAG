@@ -6,6 +6,7 @@ float mm_to_steps(float mm) {
   return mm * steps_per_rotation / mm_per_rotation;
 }
 
+
 void print_debug_log() {
   Serial.print("Position: ");
   Serial.println(stepper.currentPosition());
