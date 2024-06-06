@@ -3,7 +3,7 @@
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(250000);
+  Serial.begin(115200);
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(max_speed);
   stepper.setAcceleration(max_speed / 2);       // steps per second^2
@@ -55,7 +55,6 @@ void loop() {
     else if (command.startsWith("set")) {
       set(command);
     }
-
 
     // todo setCurrentPosition(currentPosition);
     else {
