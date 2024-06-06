@@ -1,9 +1,24 @@
 #include "motor_commands.h"
 #include <AccelStepper.h>
+#include <SoftwareSerial.h>
+#include <TMCStepper.h>
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
+  // Create a SoftwareSerial object for UART communication
+  SoftwareSerial mySerial(RX_PIN, TX_PIN); // RX, TX
+
+  // Create a TMC2208Stepper object
+  TMC2208Stepper driver = TMC2208Stepper(&mySerial, 0.11); // Use SoftwareSerial
+
+  Serial.begin(9600);
+  mySerial.begin(115200);
+
+  driver.begin();
+
+  // Enable the microPlyer feature
+  driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
+  driver.microsteps(16); // Set microstepping resolution to 16
+  
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(max_speed);
   stepper.setAcceleration(max_speed / 2);       // steps per second^2
