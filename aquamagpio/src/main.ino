@@ -6,8 +6,8 @@ void setup() {
   Serial.begin(250000);
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(max_speed);
-  stepper.setAcceleration(max_speed / 2);  // steps per second^2
-  stepper.setPinsInverted(true, false, false); // invert direction
+  stepper.setAcceleration(max_speed / 2);       // steps per second^2
+  stepper.setPinsInverted(true, false, false);  // invert direction
 
   // Set initial speed
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
@@ -43,7 +43,7 @@ void loop() {
     // Check for 'SPEED' command
     else if (command.startsWith("speed")) {
       speed(command);
-      }
+    }
 
 
     // Check for 'MOVE' command
@@ -66,7 +66,7 @@ void loop() {
 
   switch (current_state) {
     case RUNNING:
-    // Move the stepper motor continuously at the current speed
+      // Move the stepper motor continuously at the current speed
       stepper.runSpeed();
 
       break;
@@ -86,4 +86,3 @@ void loop() {
       break;
   }
 }
-
