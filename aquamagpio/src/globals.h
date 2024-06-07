@@ -1,7 +1,7 @@
 #include <AccelStepper.h>
 
-constexpr float steps_per_rotation = 25000.0;
-constexpr float mm_per_rotation = 6.0;
+constexpr float steps_per_rotation = 200.0;
+constexpr float mm_per_rotation = 8.0;
 constexpr float max_speed = steps_per_rotation * 2;
 
 float motor_speed_mms = 1.0; // mm per second
@@ -18,4 +18,6 @@ MotorState current_state = STOPPED;
 #define dirPin 5
 #define enablePin 8
 #define stepPin 2
+#define RX_PIN 6
+#define TX_PIN 7
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
