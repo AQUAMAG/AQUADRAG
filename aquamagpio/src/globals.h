@@ -1,7 +1,7 @@
 #include <AccelStepper.h>
 
-constexpr float steps_per_rotation = 25000.0;
-constexpr float mm_per_rotation = 6.0;
+constexpr float steps_per_rotation = 200.0;
+constexpr float mm_per_rotation = 8.0;
 constexpr float max_speed = steps_per_rotation * 2;
 
 float motor_speed_mms = 1.0; // mm per second
