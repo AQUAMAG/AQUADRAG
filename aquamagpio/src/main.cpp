@@ -10,14 +10,14 @@ void setup() {
   // Create a TMC2208Stepper object
   TMC2208Stepper driver = TMC2208Stepper(&mySerial, 0.11); // Use SoftwareSerial
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   mySerial.begin(115200);
 
   driver.begin();
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
-  driver.microsteps(16); // Set microstepping resolution to 16
+  driver.microsteps(256); // Set microstepping resolution to 16
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(max_speed);

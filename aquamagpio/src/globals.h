@@ -18,6 +18,6 @@ MotorState current_state = STOPPED;
 #define dirPin 5
 #define enablePin 8
 #define stepPin 2
-#define RX_PIN 0
-#define TX_PIN 1
+#define RX_PIN 6
+#define TX_PIN 7
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
