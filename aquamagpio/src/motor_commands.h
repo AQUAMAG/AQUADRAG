@@ -39,6 +39,8 @@ void move(String command) {
       String positionString = command.substring(indexOfSpace + 1);
       long position = positionString.toInt();
       move_to(position);
+      Serial.println("new position to move to is: ");
+      Serial.println(position);
       // stepper.setSpeed(motor_speed);
   } else {
       Serial.println("Invalid command format. Use 'MOVE <value>'.");

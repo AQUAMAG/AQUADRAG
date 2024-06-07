@@ -24,6 +24,7 @@ void set_home(long position_mm) {
 }
 
 void print_debug_log() {
+  Serial.println("---------");
   Serial.print("Position: ");
   Serial.println(stepper.currentPosition());
   Serial.print("Target: ");
@@ -51,6 +52,8 @@ void print_debug_log() {
     case STOPPED:
       Serial.println("STOPPED");
   }
+  Serial.println("---------");
+  Serial.println(" ");
 }
 
 void reset_direction() {

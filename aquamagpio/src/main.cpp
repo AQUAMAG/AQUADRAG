@@ -22,7 +22,7 @@ void setup() {
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(max_speed);
   stepper.setAcceleration(max_speed / 2);       // steps per second^2
-  stepper.setPinsInverted(true, false, false);  // invert direction
+  stepper.setPinsInverted(false, false, true);  // invert direction
 
   // Set initial speed
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
