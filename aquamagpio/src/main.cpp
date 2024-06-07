@@ -3,15 +3,19 @@
 #include <SoftwareSerial.h>
 #include <TMCStepper.h>
 
+
+// Create an AccelStepper object
+AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
+
+// Create a SoftwareSerial object for UART communication
+SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
+
+// Create a TMC2208Stepper object
+TMC2208Stepper driver = TMC2208Stepper(&Serial1, 0.11); // Use SoftwareSerial
+
 void setup() {
-  // Create a SoftwareSerial object for UART communication
-  SoftwareSerial mySerial(RX_PIN, TX_PIN); // RX, TX
-
-  // Create a TMC2208Stepper object
-  TMC2208Stepper driver = TMC2208Stepper(&mySerial, 0.11); // Use SoftwareSerial
-
   Serial.begin(115200);
-  mySerial.begin(115200);
+  Serial1.begin(115200);
 
   driver.begin();
 
@@ -20,15 +24,15 @@ void setup() {
   driver.microsteps(256); // Set microstepping resolution to 16
   
   // Set the maximum speed and acceleration
-  stepper.setMaxSpeed(max_speed);
-  stepper.setAcceleration(max_speed / 2);       // steps per second^2
+  stepper.setMaxSpeed(get_max_speed());
+  stepper.setAcceleration(get_max_speed() / 2);       // steps per second^2
   stepper.setPinsInverted(false, false, true);  // invert direction
 
   // Set initial speed
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
-  pinMode(enablePin, OUTPUT);
-  digitalWrite(enablePin, LOW);
-  print_debug_log();
+  pinMode(ENABLE_PIN, OUTPUT);
+  digitalWrite(ENABLE_PIN, LOW);
+  print_debug_log(&stepper);
 }
 
 void loop() {
@@ -41,41 +45,41 @@ void loop() {
 
     // Check for 'STOP' command
     if (command.equals("stop")) {
-      stop_motor();
+      stop_motor(&stepper);
     }
 
     // Check for 'Print' command
     else if (command.equals("print")) {
-      print_debug_log();
+      print_debug_log(&stepper);
     }
 
     // Check for 'START' command
     else if (command.equals("start")) {
-      start();
+      start_motor(&stepper);
 
     }
 
     // Check for 'SPEED' command
     else if (command.startsWith("speed")) {
-      speed(command);
+      speed(&stepper, command);
     }
 
 
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {
-      move(command);
+      move(&stepper, command);
     }
 
     // Check for 'SET' command
     else if (command.startsWith("set")) {
-      set(command);
+      set(&stepper, command);
     }
 
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");
     }
-    print_debug_log();
+    print_debug_log(&stepper);
   }
 
   switch (current_state) {
@@ -88,7 +92,7 @@ void loop() {
     case MOVE_POSITION:
       // Move the motor until it reaches position
       if (stepper.distanceToGo() == 0) {
-        stop_motor();
+        stop_motor(&stepper);
 
       } else {
         stepper.runSpeedToPosition();
