@@ -1,7 +1,7 @@
 #include "motor_functions.h"
 
 void stop_motor(AccelStepper* stepper) {
-  reset_direction(stepper);
+  //reset_direction(stepper);
   stepper->stop();
   current_state = STOPPED;
   Serial.println("Motor stopped.");
@@ -9,7 +9,7 @@ void stop_motor(AccelStepper* stepper) {
 
 void start_motor(AccelStepper* stepper) {
   // print_debug_log();
-  reset_direction(stepper);
+  reset_to_last_speed(stepper);
   current_state = RUNNING;
   Serial.println("Motor started.");
   print_debug_log(stepper);
