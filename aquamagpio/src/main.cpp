@@ -1,7 +1,8 @@
-#include "motor_commands.h"
 #include <AccelStepper.h>
 #include <SoftwareSerial.h>
 #include <TMCStepper.h>
+#include "motor_commands.h"
+
 
 
 // Create an AccelStepper object
@@ -21,7 +22,7 @@ void setup() {
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
-  driver.microsteps(256); // Set microstepping resolution to 16
+  driver.microsteps(0); // Set microstepping resolution to 16
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
@@ -33,10 +34,12 @@ void setup() {
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW);
   print_debug_log(&stepper);
+  stop_motor(&stepper);
 }
 
-void loop() {
-  if (Serial.available() > 0) {
+
+
+void process_command(){
     String command = Serial.readStringUntil('\n');  // Read the input string
     command.toLowerCase();
     Serial.println("---------");
@@ -46,6 +49,7 @@ void loop() {
     // Check for 'STOP' command
     if (command.equals("stop")) {
       stop_motor(&stepper);
+
     }
 
     // Check for 'Print' command
@@ -55,16 +59,21 @@ void loop() {
 
     // Check for 'START' command
     else if (command.equals("start")) {
+      Serial.println("Enter speed in mm/sec: ");
+      wait_for_input();
+      command = Serial.readStringUntil('\n');
+      Serial.println(command);
+      speed(&stepper, command);
+      //todo make direction do something
+      Serial.println("Enter direction (fwd/back): ");
+      wait_for_input();
       start_motor(&stepper);
-
     }
 
     // Check for 'SPEED' command
     else if (command.startsWith("speed")) {
       speed(&stepper, command);
     }
-
-
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {
       move(&stepper, command);
@@ -76,11 +85,21 @@ void loop() {
     }
 
     // todo setCurrentPosition(currentPosition);
+
+
     else {
       Serial.println("Unknown command.");
     }
     print_debug_log(&stepper);
-  }
+    
+
+
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+	  process_command();
+    }
 
   switch (current_state) {
     case RUNNING:

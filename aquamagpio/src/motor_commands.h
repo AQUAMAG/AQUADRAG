@@ -1,10 +1,11 @@
 #include "motor_functions.h"
-
+#include "user_inputs.h"
 void stop_motor(AccelStepper* stepper) {
   reset_direction(stepper);
   stepper->stop();
   current_state = STOPPED;
   Serial.println("Motor stopped.");
+  print_menu();
 }
 
 void start_motor(AccelStepper* stepper) {
@@ -16,6 +17,9 @@ void start_motor(AccelStepper* stepper) {
   
 }
 
+
+
+//todo fix speed to take in just a number or full command
 void speed(AccelStepper* stepper, String command) {
   //Serial.println(command);
   int indexOfSpace = command.indexOf(' ');
