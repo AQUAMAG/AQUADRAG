@@ -43,7 +43,7 @@ void set_speed(AccelStepper* stepper, float mm_per_second) {
 
 void move_to(AccelStepper* stepper, long position) {
   stepper->moveTo(position);
-  stepper->setSpeed(mm_to_steps(motor_speed_mms));
+  reset_to_last_speed(stepper);
   current_state = MOVE_POSITION;
 }
 
@@ -52,9 +52,9 @@ void set_home(AccelStepper* stepper, long position_mm) {
   stepper->setCurrentPosition(position_steps);
 }
 
-void reset_direction(AccelStepper* stepper) {
+void reset_to_last_speed(AccelStepper* stepper) {
   float steps = mm_to_steps(motor_speed_mms);
-  stepper->setSpeed(steps);  // workaround for spinning wrong direction after move to 0 bug
+  stepper->setSpeed(steps); 
   //stepper.setSpeed(-steps);
   // print_debug_log();
 }
