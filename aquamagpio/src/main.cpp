@@ -23,7 +23,7 @@ void setup() {
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
-  driver.microsteps(16); // Set microstepping resolution to 16
+  driver.microsteps(0); // Set microstepping resolution to 16
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
