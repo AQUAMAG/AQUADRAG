@@ -10,8 +10,10 @@ AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 // Create a SoftwareSerial object for UART communication
 SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
 
-// Create a TMC2208Stepper object
-TMC2208Stepper driver = TMC2208Stepper(&Serial1, 0.11); // Use SoftwareSerial
+#define driverA_ADDRESS 0b00 //Pins MS1 and MS2 connected to GND.
+
+// Create a TMC2209Stepper object
+TMC2209Stepper driver = TMC2209Stepper(&Serial1, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
 
 void setup() {
   Serial.begin(115200);
@@ -21,7 +23,7 @@ void setup() {
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
-  driver.microsteps(256); // Set microstepping resolution to 16
+  driver.microsteps(16); // Set microstepping resolution to 16
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
