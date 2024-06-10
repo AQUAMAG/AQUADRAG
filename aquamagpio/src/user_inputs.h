@@ -17,5 +17,5 @@ void wait_for_input() {
 
 void print_menu(){
   Serial.println("Enter a command:");
-  Serial.println("Start, Stop, Speed <value>, Move <target step>, Set <value>, Print, Move Set Distance, Go Home, Reset Home");
+  Serial.println("Start, Stop, Print, Speed <value>, Home, Move <target step>, Set <value>, help");
 }

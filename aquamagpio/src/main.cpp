@@ -65,8 +65,8 @@ void process_command(){
       Serial.println(command);
       speed(&stepper, command);
       //todo make direction do something
-      Serial.println("Enter direction (fwd/back): ");
-      wait_for_input();
+      // Serial.println("Enter direction (fwd/back): ");
+      // wait_for_input();
       start_motor(&stepper);
     }
 
@@ -78,15 +78,18 @@ void process_command(){
     else if (command.startsWith("move")) {
       move(&stepper, command);
     }
+    //todo fix hardcoded move 0 for proper home command
+    // Check for 'HOME' command
+    else if (command.startsWith("home")) {
+      move(&stepper, "move 0");
+    }
 
+    //todo fix set home command
     // Check for 'SET' command
     else if (command.startsWith("set")) {
       set(&stepper, command);
     }
-
     // todo setCurrentPosition(currentPosition);
-
-
     else {
       Serial.println("Unknown command.");
     }
