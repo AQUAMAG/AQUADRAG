@@ -35,6 +35,14 @@ void print_debug_log(AccelStepper* stepper) {
   Serial.println(" ");
 }
 
+
+void reset_to_last_speed(AccelStepper* stepper) {
+  float steps = mm_to_steps(motor_speed_mms);
+  stepper->setSpeed(steps); 
+  //stepper.setSpeed(-steps);
+  // print_debug_log();
+}
+
 void set_speed(AccelStepper* stepper, float mm_per_second) {
   float steps = mm_to_steps(mm_per_second);
   stepper->setSpeed(steps);
@@ -52,12 +60,7 @@ void set_home(AccelStepper* stepper, long position_mm) {
   stepper->setCurrentPosition(position_steps);
 }
 
-void reset_to_last_speed(AccelStepper* stepper) {
-  float steps = mm_to_steps(motor_speed_mms);
-  stepper->setSpeed(steps); 
-  //stepper.setSpeed(-steps);
-  // print_debug_log();
-}
+
 
 
 
