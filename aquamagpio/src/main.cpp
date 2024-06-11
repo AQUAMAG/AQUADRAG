@@ -23,7 +23,10 @@ void setup() {
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
-  driver.microsteps(0); // Set microstepping resolution to 16
+  // driver.rms_current(uint16_t mA)
+
+
+  driver.microsteps(256); // Set microstepping resolution to 0 (full step)
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
@@ -34,7 +37,7 @@ void setup() {
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW);
-  print_debug_log(&stepper);
+  print_debug_log(&stepper, &driver);
 }
 
 void loop() {
@@ -52,12 +55,12 @@ void loop() {
 
     // Check for 'Print' command
     else if (command.equals("print")) {
-      print_debug_log(&stepper);
+      print_debug_log(&stepper, &driver);
     }
 
     // Check for 'START' command
     else if (command.equals("start")) {
-      start_motor(&stepper);
+      start_motor(&stepper, &driver);
 
     }
 
@@ -77,11 +80,16 @@ void loop() {
       set(&stepper, command);
     }
 
+    // Check for 'MICRO' command
+    else if (command.startsWith("micro")) {
+      set_microsteps(&driver, command);
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");
     }
-    print_debug_log(&stepper);
+    print_debug_log(&stepper, &driver);
   }
 
   switch (current_state) {

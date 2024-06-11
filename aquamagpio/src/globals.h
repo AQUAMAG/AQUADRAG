@@ -1,4 +1,5 @@
 #include <AccelStepper.h>
+#include <TMCStepper.h>
 
 enum MotorState {
   RUNNING,
