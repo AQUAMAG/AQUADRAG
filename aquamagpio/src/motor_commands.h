@@ -1,3 +1,5 @@
+#ifndef MOTOR_COMMANDS_H
+#define MOTOR_COMMANDS_H
 #include "motor_functions.h"
 
 void stop_motor(AccelStepper* stepper) {
@@ -62,3 +64,5 @@ void set(AccelStepper* stepper, String command) {
     set_home(stepper, 0);
   }
 }
+
+#endif

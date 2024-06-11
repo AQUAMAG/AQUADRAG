@@ -1,5 +1,6 @@
 // motor_functions.h
-
+#ifndef MOTOR_FUNCTIONS_H
+#define MOTOR_FUNCTIONS_H
 #include "globals.h"
 
 void print_debug_log(AccelStepper* stepper) {
@@ -60,6 +61,7 @@ void set_home(AccelStepper* stepper, long position_mm) {
   stepper->setCurrentPosition(position_steps);
 }
 
+#endif
 
 
 
