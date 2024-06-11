@@ -1,3 +1,6 @@
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 #include <AccelStepper.h>
 
 enum MotorState {
@@ -50,3 +53,5 @@ float motor_speed_mms = 1.0; // mm per second
 #define STEP_PIN 2
 #define RX_PIN 12 //Spindle Enable pin per CNC shield pin-out
 #define TX_PIN 13 //Spindle Direction pin per CNC shield pin-out
+
+#endif
