@@ -3,14 +3,14 @@
 void stop_motor(AccelStepper* stepper) {
   //reset_direction(stepper);
   stepper->stop();
-  current_state = STOPPED;
+  CURRENT_STATE = STOPPED;
   Serial.println("Motor stopped.");
 }
 
 void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
   // print_debug_log();
   reset_to_last_speed(stepper);
-  current_state = RUNNING;
+  CURRENT_STATE = RUNNING;
   Serial.println("Motor started.");
   print_debug_log(stepper, driver);
   

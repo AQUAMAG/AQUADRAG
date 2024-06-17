@@ -16,12 +16,12 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.print("Current: ");
   Serial.print(driver->rms_current());
   Serial.println(" (mA)");
-  Serial.print("microsteps: ");
-  Serial.println(driver->microsteps());
+  Serial.print("Microsteps: ");
+  Serial.println(2 ^ (driver->cs_actual() + 1));
   Serial.print("Max speed: ");
   Serial.println(get_max_speed());
   Serial.print("State: ");
-  switch (current_state) {
+  switch (CURRENT_STATE) {
     case RUNNING:
       Serial.println("RUNNING");
       break;
@@ -54,7 +54,7 @@ void set_speed(AccelStepper* stepper, float mm_per_second) {
 void move_to(AccelStepper* stepper, long position) {
   stepper->moveTo(position);
   reset_to_last_speed(stepper);
-  current_state = MOVE_POSITION;
+  CURRENT_STATE = MOVE_POSITION;
 }
 
 void set_home(AccelStepper* stepper, long position_mm) {

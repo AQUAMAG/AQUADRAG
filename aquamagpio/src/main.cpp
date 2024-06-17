@@ -26,7 +26,7 @@ void setup() {
   // driver.rms_current(uint16_t mA)
 
 
-  driver.microsteps(256); // Set microstepping resolution to 0 (full step)
+  driver.microsteps(0); // Set microstepping resolution to 0 (full step)
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
@@ -36,7 +36,7 @@ void setup() {
   // Set initial speed
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
   pinMode(ENABLE_PIN, OUTPUT);
-  digitalWrite(ENABLE_PIN, LOW);
+  digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
   print_debug_log(&stepper, &driver);
 }
 
@@ -92,7 +92,7 @@ void loop() {
     print_debug_log(&stepper, &driver);
   }
 
-  switch (current_state) {
+  switch (CURRENT_STATE) {
     case RUNNING:
       // Move the stepper motor continuously at the current speed
       stepper.runSpeed();

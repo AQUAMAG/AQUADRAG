@@ -19,18 +19,42 @@ enum MicroSteps {
   MS_256 = 256
 };
 
-MotorState current_state = STOPPED;
-MicroSteps microsteps = MS_16;
+MotorState CURRENT_STATE = STOPPED;
+MicroSteps MICROSTEPS = MS_16;
+
+void set_microsteps(uint16_t ms) {
+  // handle input between microstep values
+  if(ms < 2) {
+    ms = 0;
+  } else if(ms < 4) {
+    ms = 2;
+  } else if(ms < 8) {
+    ms = 4;
+  } else if(ms < 16) {
+    ms = 8;
+  } else if(ms < 32) {
+    ms = 16;
+  } else if(ms < 64) {
+    ms = 32;
+  } else if(ms < 128) {
+    ms = 64;
+  } else if(ms < 256) {
+    ms = 128;
+  } else {
+    ms = 256;
+  }
+  MICROSTEPS = static_cast<MicroSteps>(ms);
+}
 
 constexpr float full_steps_per_rotation = 200.0;
 constexpr float mm_per_rotation = 8.0;
 
 long get_steps_per_rotation() {
   long steps;
-  if(microsteps == 0) {
+  if(MICROSTEPS == 0) {
     steps = 200;
   } else {
-    steps = full_steps_per_rotation * microsteps;
+    steps = full_steps_per_rotation * MICROSTEPS;
   }
   return steps;
 }
