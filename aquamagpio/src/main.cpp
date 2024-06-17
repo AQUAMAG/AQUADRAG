@@ -1,8 +1,10 @@
 #include "motor_commands.h"
 #include <AccelStepper.h>
+#include <ezButton.h>
 #include <SoftwareSerial.h>
 #include <TMCStepper.h>
 
+ezButton limitSwitch(9); // Create a button object that attach to pin 9;
 
 // Create an AccelStepper object
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
@@ -16,6 +18,8 @@ SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
 TMC2209Stepper driver = TMC2209Stepper(&Serial1, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
 
 void setup() {
+  limitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
+
   Serial.begin(115200);
   Serial1.begin(115200);
 
@@ -41,6 +45,7 @@ void setup() {
 }
 
 void loop() {
+  // Check if there is any input from the Serial Monitor
   if (Serial.available() > 0) {
     String command = Serial.readStringUntil('\n');  // Read the input string
     command.toLowerCase();
@@ -91,6 +96,25 @@ void loop() {
     }
     print_debug_log(&stepper, &driver);
   }
+
+  // Check if the limit switch is pressed
+  limitSwitch.loop(); // MUST call the loop() function first
+
+  if(limitSwitch.isPressed()) {
+    invert_direction(&stepper);
+    CURRENT_STATE = RUNNING;
+  }
+
+  if(limitSwitch.isReleased()) {
+    invert_direction(&stepper);
+    stop_motor(&stepper);
+  }
+
+  // int state = limitSwitch.getState();
+  // if(state == HIGH)
+  //   Serial.println("The limit switch: UNTOUCHED");
+  // else
+  //   Serial.println("The limit switch: TOUCHED");
 
   switch (CURRENT_STATE) {
     case RUNNING:
