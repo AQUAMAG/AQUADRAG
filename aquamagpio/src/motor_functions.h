@@ -1,7 +1,7 @@
 // motor_functions.h
 #ifndef MOTOR_FUNCTIONS_H
 #define MOTOR_FUNCTIONS_H
-#include "globals.h"
+#include "globals.hpp"
 
 void print_debug_log(AccelStepper* stepper) {
   Serial.println("---------");
@@ -19,6 +19,8 @@ void print_debug_log(AccelStepper* stepper) {
   Serial.println(" steps/sec");
   Serial.print("Max speed: ");
   Serial.println(get_max_speed());
+  Serial.print("Microsteps: ");
+  Serial.println(MICROSTEPS);
   Serial.print("State: ");
   switch (current_state) {
     case RUNNING:

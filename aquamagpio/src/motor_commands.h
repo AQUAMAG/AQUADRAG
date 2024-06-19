@@ -49,19 +49,32 @@ void move(AccelStepper* stepper, String command) {
     }
 }
 
-void set(AccelStepper* stepper, String command) {
+void set_microsteps(TMC2209Stepper* driver, String command) {
   int indexOfSpace = command.indexOf(' ');
   if (indexOfSpace != -1) {
-    String distanceString = command.substring(indexOfSpace + 1);
-    float distanceValue = distanceString.toFloat();
-    if (distanceValue != 0.0 || distanceString == "0" || distanceString == "0.0") {
-      set_home(stepper, distanceValue);
+    String microstepString = command.substring(indexOfSpace + 1);
+    int microstepValue = microstepString.toInt();
+      #ifdef DEBUG
+      Serial.print("Setting microsteps to: ");
+      Serial.println(microstepValue);
+      #endif
+    if (is_valid_microsteps(microstepValue)) {
+      MICROSTEPS = microstepValue;
+      driver->microsteps(MICROSTEPS);
+
+      #ifdef DEBUG
+      Serial.print("Microsteps driver actual value: ");
+      Serial.println(driver->microsteps());
+      Serial.print("Microsteps global set value: ");
+      Serial.println(MICROSTEPS);
+      #endif
+      
     } else {
-      Serial.print(distanceString);
-      Serial.println(" is an invalid distance value.");
+      Serial.print(microstepString);
+      Serial.println(" is an invalid microstep value.");
     }
   } else {
-    set_home(stepper, 0);
+    Serial.println("Invalid command format. Use 'SET <Microstep value>'.");
   }
 }
 

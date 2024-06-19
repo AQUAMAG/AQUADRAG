@@ -1,7 +1,9 @@
 #include "motor_commands.h"
 #include <AccelStepper.h>
 #include <SoftwareSerial.h>
-#include <TMCStepper.h>
+
+
+
 
 
 // Create an AccelStepper object
@@ -23,7 +25,7 @@ void setup() {
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
-  driver.microsteps(0); // Set microstepping resolution to 16
+  driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
@@ -74,7 +76,7 @@ void loop() {
 
     // Check for 'SET' command
     else if (command.startsWith("set")) {
-      set(&stepper, command);
+      set_microsteps(&driver, command);
     }
 
     // todo setCurrentPosition(currentPosition);
