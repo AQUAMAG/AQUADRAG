@@ -1,7 +1,7 @@
 // motor_functions.h
 #ifndef MOTOR_FUNCTIONS_H
 #define MOTOR_FUNCTIONS_H
-#include "globals.hpp"
+#include "globals.h"
 
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println("---------");

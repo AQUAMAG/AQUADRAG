@@ -13,7 +13,7 @@ enum MotorState {
 
 int MICROSTEPS = 256;
 
-MotorState current_state = STOPPED;
+MotorState CURRENT_STATE = STOPPED;
 
 
 constexpr float full_steps_per_rotation = 200.0;
