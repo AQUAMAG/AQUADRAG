@@ -1,3 +1,5 @@
+#ifndef MOTOR_COMMANDS_H
+#define MOTOR_COMMANDS_H
 #include "motor_functions.h"
 
 void stop_motor(AccelStepper* stepper) {
@@ -78,3 +80,4 @@ void set_microsteps(TMC2209Stepper* driver, String command) {
     Serial.println("Invalid command format. Use 'micro <value>'.");
   }
 }
+#endif

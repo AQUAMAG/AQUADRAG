@@ -1,5 +1,6 @@
 // motor_functions.h
-
+#ifndef MOTOR_FUNCTIONS_H
+#define MOTOR_FUNCTIONS_H
 #include "globals.h"
 
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
@@ -65,9 +66,13 @@ void set_home(AccelStepper* stepper, long position_mm) {
   stepper->setCurrentPosition(position_steps);
 }
 
+
 // void set_microsteps(AccelStepper* stepper, long microsteps) {
 //   stepper->microsteps(microsteps);
 // }
+
+#endif
+
 
 
 
