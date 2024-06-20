@@ -74,23 +74,7 @@ void set_microsteps(TMC2209Stepper* driver, String command) {
       Serial.println(" is an invalid microstep value.");
     }
   } else {
-    Serial.println("Invalid command format. Use 'SET <Microstep value>'.");
-  }
-}
-
-void set_microsteps(TMC2209Stepper* driver, String command) {
-  int indexOfSpace = command.indexOf(' ');
-  if (indexOfSpace != -1) {
-    String microstepsString = command.substring(indexOfSpace + 1);
-    long microstepsValue = microstepsString.toInt();
-    if (microstepsValue != 0 || microstepsString == "0" || microstepsString == "0.0") {
-      driver->microsteps(microstepsValue);
-    } else {
-      Serial.print(microstepsString);
-      Serial.println(" is an invalid microstep value.");
-    }
-  } else {
-    Serial.println("Invalid command format. Use 'micro <value>'.");
+    Serial.println("Invalid command format. Use 'MICRO <Microstep value>'.");
   }
 }
 #endif

@@ -22,13 +22,13 @@ constexpr float mm_per_rotation = 8.0;
 long get_steps_per_rotation() {
   long steps;
   if(MICROSTEPS == 0) {
-  if(MICROSTEPS == 0) {
     steps = 200;
   } else {
     steps = full_steps_per_rotation * MICROSTEPS;
   }
   return steps;
 }
+
 
 long get_max_speed() {
   return get_steps_per_rotation() * 2;

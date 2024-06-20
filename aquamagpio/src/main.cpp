@@ -81,16 +81,6 @@ void loop() {
       move(&stepper, command);
     }
 
-    // Check for 'SET' command
-    else if (command.startsWith("set")) {
-      set(&driver, command);
-    }
-
-    // Check for 'MICRO' command
-    else if (command.startsWith("micro")) {
-      set_microsteps(&driver, command);
-    }
-
     // Check for 'MICRO' command
     else if (command.startsWith("micro")) {
       set_microsteps(&driver, command);
