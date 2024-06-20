@@ -49,35 +49,32 @@ void move(AccelStepper* stepper, String command) {
     }
 }
 
-void set(AccelStepper* stepper, String command) {
-  int indexOfSpace = command.indexOf(' ');
-  if (indexOfSpace != -1) {
-    String distanceString = command.substring(indexOfSpace + 1);
-    float distanceValue = distanceString.toFloat();
-    if (distanceValue != 0.0 || distanceString == "0" || distanceString == "0.0") {
-      set_home(stepper, distanceValue);
-    } else {
-      Serial.print(distanceString);
-      Serial.println(" is an invalid distance value.");
-    }
-  } else {
-    set_home(stepper, 0);
-  }
-}
-
 void set_microsteps(TMC2209Stepper* driver, String command) {
   int indexOfSpace = command.indexOf(' ');
   if (indexOfSpace != -1) {
-    String microstepsString = command.substring(indexOfSpace + 1);
-    long microstepsValue = microstepsString.toInt();
-    if (microstepsValue != 0 || microstepsString == "0" || microstepsString == "0.0") {
-      driver->microsteps(microstepsValue);
+    String microstepString = command.substring(indexOfSpace + 1);
+    int microstepValue = microstepString.toInt();
+      #ifdef DEBUG
+      Serial.print("Setting microsteps to: ");
+      Serial.println(microstepValue);
+      #endif
+    if (is_valid_microsteps(microstepValue)) {
+      MICROSTEPS = microstepValue;
+      driver->microsteps(MICROSTEPS);
+
+      #ifdef DEBUG
+      Serial.print("Microsteps driver actual value: ");
+      Serial.println(driver->microsteps());
+      Serial.print("Microsteps global set value: ");
+      Serial.println(MICROSTEPS);
+      #endif
+      
     } else {
-      Serial.print(microstepsString);
+      Serial.print(microstepString);
       Serial.println(" is an invalid microstep value.");
     }
   } else {
-    Serial.println("Invalid command format. Use 'micro <value>'.");
+    Serial.println("Invalid command format. Use 'MICRO <Microstep value>'.");
   }
 }
 #endif

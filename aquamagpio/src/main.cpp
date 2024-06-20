@@ -4,6 +4,7 @@
 #include <SoftwareSerial.h>
 #include <TMCStepper.h>
 
+
 ezButton limitSwitch(9); // Create a button object that attach to pin 9;
 
 // Create an AccelStepper object
@@ -27,10 +28,10 @@ void setup() {
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
+  driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
   // driver.rms_current(uint16_t mA)
 
 
-  driver.microsteps(0); // Set microstepping resolution to 0 (full step)
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(get_max_speed());
@@ -78,11 +79,6 @@ void loop() {
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {
       move(&stepper, command);
-    }
-
-    // Check for 'SET' command
-    else if (command.startsWith("set")) {
-      set(&stepper, command);
     }
 
     // Check for 'MICRO' command
