@@ -17,7 +17,7 @@ MotorState CURRENT_STATE = STOPPED;
 
 
 constexpr float full_steps_per_rotation = 200.0;
-constexpr float mm_per_rotation = 8.0;
+constexpr float mm_per_rotation = 5.0;
 
 long get_steps_per_rotation() {
   long steps;
