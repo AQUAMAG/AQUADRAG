@@ -3,7 +3,7 @@
 #define MOTOR_FUNCTIONS_H
 #include "globals.h"
 
-void print_debug_log(AccelStepper* stepper) {
+void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println("---------");
   Serial.print("Position: ");
   Serial.println(stepper->currentPosition());
@@ -14,13 +14,15 @@ void print_debug_log(AccelStepper* stepper) {
   Serial.println(" (steps/sec)");
   Serial.print(motor_speed_mms);
   Serial.println(" (mm/sec)");
-  Serial.print("Current Speed: ");
-  Serial.print(stepper->speed());
-  Serial.println(" steps/sec");
+  Serial.print("Current: ");
+  Serial.print(driver->rms_current());
+  Serial.println(" (mA)");
+  Serial.print("Microsteps: ");
+  Serial.println(driver->microsteps());
   Serial.print("Max speed: ");
   Serial.println(get_max_speed());
   Serial.print("State: ");
-  switch (current_state) {
+  switch (CURRENT_STATE) {
     case RUNNING:
       Serial.println("RUNNING");
       break;
@@ -36,6 +38,9 @@ void print_debug_log(AccelStepper* stepper) {
   Serial.println(" ");
 }
 
+void invert_direction(AccelStepper* stepper) {
+  stepper->setSpeed(-stepper->speed());
+}
 
 void reset_to_last_speed(AccelStepper* stepper) {
   float steps = mm_to_steps(motor_speed_mms);
@@ -53,7 +58,7 @@ void set_speed(AccelStepper* stepper, float mm_per_second) {
 void move_to(AccelStepper* stepper, long position) {
   stepper->moveTo(position);
   reset_to_last_speed(stepper);
-  current_state = MOVE_POSITION;
+  CURRENT_STATE = MOVE_POSITION;
 }
 
 void set_home(AccelStepper* stepper, long position_mm) {
@@ -61,7 +66,13 @@ void set_home(AccelStepper* stepper, long position_mm) {
   stepper->setCurrentPosition(position_steps);
 }
 
+
+// void set_microsteps(AccelStepper* stepper, long microsteps) {
+//   stepper->microsteps(microsteps);
+// }
+
 #endif
+
 
 
 

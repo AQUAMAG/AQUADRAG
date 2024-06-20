@@ -5,16 +5,16 @@
 void stop_motor(AccelStepper* stepper) {
   //reset_direction(stepper);
   stepper->stop();
-  current_state = STOPPED;
+  CURRENT_STATE = STOPPED;
   Serial.println("Motor stopped.");
 }
 
-void start_motor(AccelStepper* stepper) {
+void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
   // print_debug_log();
   reset_to_last_speed(stepper);
-  current_state = RUNNING;
+  CURRENT_STATE = RUNNING;
   Serial.println("Motor started.");
-  print_debug_log(stepper);
+  print_debug_log(stepper, driver);
   
 }
 
@@ -65,4 +65,19 @@ void set(AccelStepper* stepper, String command) {
   }
 }
 
+void set_microsteps(TMC2209Stepper* driver, String command) {
+  int indexOfSpace = command.indexOf(' ');
+  if (indexOfSpace != -1) {
+    String microstepsString = command.substring(indexOfSpace + 1);
+    long microstepsValue = microstepsString.toInt();
+    if (microstepsValue != 0 || microstepsString == "0" || microstepsString == "0.0") {
+      driver->microsteps(microstepsValue);
+    } else {
+      Serial.print(microstepsString);
+      Serial.println(" is an invalid microstep value.");
+    }
+  } else {
+    Serial.println("Invalid command format. Use 'micro <value>'.");
+  }
+}
 #endif
