@@ -12,7 +12,7 @@ ezButton endLimitSwitch(10); // End limit switch attached to pin 10;
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 
 // Create a SoftwareSerial object for UART communication
-SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
+SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX - pin 12, TX - pin 13
 
 #define driverA_ADDRESS 0b00 //Pins MS1 and MS2 connected to GND.
 
