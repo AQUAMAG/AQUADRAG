@@ -43,6 +43,7 @@ void setup() {
   stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
+
   print_debug_log(&stepper, &driver);
 }
 

@@ -22,7 +22,10 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.print("Max speed: ");
   Serial.println(get_max_speed());
   Serial.print("Microsteps: ");
-  Serial.println(MICROSTEPS);
+  Serial.println(driver->microsteps());
+  Serial.print("Driver version: ");
+  auto version = driver->version();
+  Serial.println(version, HEX);
   Serial.print("State: ");
   switch (CURRENT_STATE) {
     case HOME_LIMIT:
