@@ -60,7 +60,7 @@ float motor_speed_mms = 1.0; // mm per second
 #define DIR_PIN 5
 #define ENABLE_PIN 8
 #define STEP_PIN 2
-#define RX_PIN 13 //Spindle Enable pin per CNC shield pin-out
-#define TX_PIN 6 //Spindle Direction pin per CNC shield pin-out
+#define RX_PIN 3 // Step Pulse Y-axis pin per CNC shield pin-out
+#define TX_PIN 6 // Direction Y-axis pin per CNC shield pin-out
 
 #endif
