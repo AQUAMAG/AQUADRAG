@@ -5,7 +5,8 @@
 #include <TMCStepper.h>
 
 
-ezButton limitSwitch(9); // Create a button object that attach to pin 9;
+ezButton homeLimitSwitch(9); // Home limit switch attached to pin 9
+ezButton endLimitSwitch(10); // End limit switch attached to pin 10;
 
 // Create an AccelStepper object
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
@@ -19,8 +20,8 @@ SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
 TMC2209Stepper driver = TMC2209Stepper(&Serial1, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
 
 void setup() {
-  limitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
-
+  homeLimitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
+  endLimitSwitch.setDebounceTime(50);
   Serial.begin(115200);
   Serial1.begin(115200);
 
@@ -94,17 +95,26 @@ void loop() {
   }
 
   // Check if the limit switch is pressed
-  limitSwitch.loop(); // MUST call the loop() function first
+  homeLimitSwitch.loop(); 
+  endLimitSwitch.loop(); 
 
-  if(limitSwitch.isPressed()) {
-    invert_direction(&stepper);
-    CURRENT_STATE = RUNNING;
+  if(homeLimitSwitch.isPressed()) {
+    #ifdef DEBUG
+          Serial.println("Home limit is pressed.");
+    #endif
+    stop_motor(&stepper); //if home motor is
+    CURRENT_STATE = HOME_LIMIT;
   }
 
-  if(limitSwitch.isReleased()) {
-    invert_direction(&stepper);
-    stop_motor(&stepper);
+  if(endLimitSwitch.isPressed()) {
+    #ifdef DEBUG
+          Serial.println("End limit is pressed.");
+    #endif
+    stop_motor(&stepper); //if home motor is
+    CURRENT_STATE = END_LIMIT;
   }
+
+
 
   // int state = limitSwitch.getState();
   // if(state == HIGH)
@@ -113,6 +123,34 @@ void loop() {
   //   Serial.println("The limit switch: TOUCHED");
 
   switch (CURRENT_STATE) {
+
+    case HOME_LIMIT:
+      motor_speed_mms = 0.25;
+      reset_to_last_speed(&stepper);
+      stepper.runSpeed();
+        if(homeLimitSwitch.isReleased()) {
+          stop_motor(&stepper);
+          stepper.setCurrentPosition(0);
+
+          #ifdef DEBUG
+          Serial.println("Home limit is released.");
+          #endif
+        }
+      break;
+
+    case END_LIMIT:
+    motor_speed_mms = -0.25;//set motor speed to 0.25 mm/s
+    reset_to_last_speed(&stepper);
+      stepper.runSpeed(); //start the motor and run until the limit switch is released
+      if(endLimitSwitch.isReleased()) {
+        stop_motor(&stepper);
+
+        #ifdef DEBUG
+        Serial.println("End limit is released.");
+        #endif
+      }
+      break;
+
     case RUNNING:
       // Move the stepper motor continuously at the current speed
       stepper.runSpeed();
@@ -123,7 +161,6 @@ void loop() {
       // Move the motor until it reaches position
       if (stepper.distanceToGo() == 0) {
         stop_motor(&stepper);
-
       } else {
         stepper.runSpeedToPosition();
       }

@@ -25,6 +25,12 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println(MICROSTEPS);
   Serial.print("State: ");
   switch (CURRENT_STATE) {
+    case HOME_LIMIT:
+      Serial.println("HOME_LIMIT");
+      break;
+    case END_LIMIT:
+      Serial.println("END_LIMIT");
+      break;
     case RUNNING:
       Serial.println("RUNNING");
       break;

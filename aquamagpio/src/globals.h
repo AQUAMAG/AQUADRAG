@@ -6,6 +6,8 @@
 #define DEBUG
 
 enum MotorState {
+  HOME_LIMIT,
+  END_LIMIT,
   RUNNING,
   MOVE_POSITION,
   STOPPED
