@@ -23,7 +23,7 @@ void setup() {
   homeLimitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
   endLimitSwitch.setDebounceTime(50);
   Serial.begin(115200);
-  Serial1.begin(57600);
+  Serial1.begin(115200);
 
   driver.begin();
 
@@ -44,10 +44,6 @@ void setup() {
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
-  // pinMode(13, OUTPUT);
-  // digitalWrite(13, HIGH);
-  // pinMode(6, OUTPUT);
-  // digitalWrite(6, HIGH);
   print_debug_log(&stepper, &driver);
 }
 
