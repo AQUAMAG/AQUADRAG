@@ -23,7 +23,7 @@ void setup() {
   homeLimitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
   endLimitSwitch.setDebounceTime(50);
   Serial.begin(115200);
-  Serial1.begin(115200);
+  Serial1.begin(57600);
 
   driver.begin();
 
