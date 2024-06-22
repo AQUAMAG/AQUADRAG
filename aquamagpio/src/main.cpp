@@ -27,6 +27,12 @@ void setup() {
 
   driver.begin();
 
+  while(driver.version() != 0x21) {
+    Serial.println("UART communication failed. Retrying...");
+    delay(2000);
+  }
+  Serial.println("UART communication established.");
+
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
   driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
