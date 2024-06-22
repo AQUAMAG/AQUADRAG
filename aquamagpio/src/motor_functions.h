@@ -17,11 +17,11 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.print("Current: ");
   Serial.print(driver->rms_current());
   Serial.println(" (mA)");
-  Serial.print("Microsteps: ");
+  Serial.print("Microsteps global variable: ");
   Serial.println(driver->microsteps());
   Serial.print("Max speed: ");
   Serial.println(get_max_speed());
-  Serial.print("Microsteps: ");
+  Serial.print("Microsteps driver register: ");
   Serial.println(driver->microsteps());
   Serial.print("Driver version: ");
   auto version = driver->version();
