@@ -20,7 +20,7 @@ MotorState CURRENT_STATE = STOPPED;
 
 constexpr float full_steps_per_rotation = 200.0;
 constexpr float mm_per_rotation = 5.0;
-constexpr long MAX_SPEED = 1000.0;
+constexpr long MAX_SPEED = 10240.0; // steps per second when actuator is moving at 1 mm/s with 256 microsteps
 
 long get_steps_per_rotation() {
   long steps;
@@ -55,7 +55,7 @@ bool is_valid_microsteps(int n) {
 }
 
 // float motor_speed_mms = 1.0; // mm per second
-float MOTOR_SPEED = 40.0; // steps per second
+float MOTOR_SPEED_STEPS = 40.0; // steps per second
 
 // Define the stepper and the pins it will use
 #define DIR_PIN 5

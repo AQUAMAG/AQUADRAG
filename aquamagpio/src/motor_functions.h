@@ -13,10 +13,10 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.print(stepper->speed());
   Serial.println(" (steps/sec)");
   Serial.println("Motor speed global: ");
-  Serial.print(MOTOR_SPEED);
+  Serial.print(MOTOR_SPEED_STEPS);
   Serial.println(" (steps/sec)");
-  Serial.print("Actuator speed: ");
-  Serial.print(steps_to_mm(MOTOR_SPEED));
+  Serial.print("Actuator pull speed: ");
+  Serial.print(steps_to_mm(MOTOR_SPEED_STEPS));
   Serial.println(" (mm/sec)");
   Serial.print("Current: ");
   Serial.print(driver->rms_current());
@@ -58,19 +58,19 @@ void invert_direction(AccelStepper* stepper) {
 }
 
 void reset_to_last_speed(AccelStepper* stepper) {
-  stepper->setSpeed(MOTOR_SPEED); 
+  stepper->setSpeed(MOTOR_SPEED_STEPS); 
   //stepper.setSpeed(-steps);
   // print_debug_log();
 }
 
 void set_speed_mm_per_second(AccelStepper* stepper, float mm_per_second) {
-  MOTOR_SPEED = mm_to_steps(mm_per_second);
-  stepper->setSpeed(MOTOR_SPEED);
+  MOTOR_SPEED_STEPS = mm_to_steps(mm_per_second);
+  stepper->setSpeed(MOTOR_SPEED_STEPS);
 }
 
 void set_speed_steps_per_second(AccelStepper* stepper, float steps_per_second) {
-  MOTOR_SPEED = steps_per_second;
-  stepper->setSpeed(MOTOR_SPEED);
+  MOTOR_SPEED_STEPS = steps_per_second;
+  stepper->setSpeed(MOTOR_SPEED_STEPS);
 }
 
 void move_to(AccelStepper* stepper, long position) {

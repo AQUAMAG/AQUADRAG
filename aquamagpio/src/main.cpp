@@ -46,7 +46,7 @@ void setup() {
   stepper.setPinsInverted(false, false, true);  // invert direction
 
   // Set initial speed
-  stepper.setSpeed(MOTOR_SPEED);  // steps per second
+  stepper.setSpeed(MOTOR_SPEED_STEPS);  // steps per second
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
