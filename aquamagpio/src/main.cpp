@@ -28,6 +28,12 @@ void setup() {
 
   driver.begin();
 
+  while(driver.version() != 0x21) {
+    Serial.println("UART communication failed. Retrying...");
+    delay(2000);
+  }
+  Serial.println("UART communication established.");
+
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
   driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
@@ -36,8 +42,8 @@ void setup() {
 
   
   // Set the maximum speed and acceleration
-  stepper.setMaxSpeed(get_max_speed());
-  stepper.setAcceleration(get_max_speed() / 2);       // steps per second^2
+  stepper.setMaxSpeed(MAX_SPEED);
+  stepper.setAcceleration(MAX_SPEED / 2);       // steps per second^2
   stepper.setPinsInverted(false, false, true);  // invert direction
 
   // Set initial speed
@@ -86,6 +92,12 @@ void process_command(){
     else if (command.startsWith("speed")) {
       speed(&stepper, command);
     }
+
+    // Check for 'STEPS' command
+    else if (command.startsWith("steps")) {
+      steps(&stepper, command);
+    }
+
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {
       move(&stepper, command);
