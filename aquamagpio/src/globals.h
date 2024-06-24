@@ -5,6 +5,15 @@
 
 #define DEBUG
 
+float motor_speed_mms = 1.0; // mm per second
+
+// Define the stepper and the pins it will use
+#define DIR_PIN 5
+#define ENABLE_PIN 8
+#define STEP_PIN 2
+#define RX_PIN 3 // Step Pulse Y-axis pin per CNC shield pin-out
+#define TX_PIN 6 // Direction Y-axis pin per CNC shield pin-out
+
 enum MotorState {
   HOME_LIMIT,
   END_LIMIT,
@@ -13,7 +22,7 @@ enum MotorState {
   STOPPED
 };
 
-int MICROSTEPS = 0;
+int MICROSTEPS = 256;
 
 MotorState CURRENT_STATE = STOPPED;
 
@@ -33,7 +42,7 @@ long get_steps_per_rotation() {
 
 
 long get_max_speed() {
-  return get_steps_per_rotation() * 2;
+  return get_steps_per_rotation() * 2.5;
 }
 
 float mm_to_steps(float mm) {
@@ -54,13 +63,6 @@ bool is_valid_microsteps(int n) {
     return false;
 }
 
-float motor_speed_mms = 1.0; // mm per second
 
-// Define the stepper and the pins it will use
-#define DIR_PIN 5
-#define ENABLE_PIN 8
-#define STEP_PIN 2
-#define RX_PIN 3 // Step Pulse Y-axis pin per CNC shield pin-out
-#define TX_PIN 6 // Direction Y-axis pin per CNC shield pin-out
 
 #endif
