@@ -25,13 +25,30 @@ void speed(AccelStepper* stepper, String command) {
         String speedString = command.substring(indexOfSpace + 1);
         float speedValue = speedString.toFloat();
         if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-          set_speed(stepper, speedValue);
+          set_speed_mm_per_second(stepper, speedValue);
         } else {
           Serial.print(speedString);
           Serial.println(" is an invalid speed value.");
         }
       } else {
         Serial.println("Invalid command format. Use 'SPEED <value>'.");
+    }
+}
+
+void steps(AccelStepper* stepper, String command) {
+  //Serial.println(command);
+  int indexOfSpace = command.indexOf(' ');
+      if (indexOfSpace != -1) {
+        String speedString = command.substring(indexOfSpace + 1);
+        float speedValue = speedString.toFloat();
+        if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
+          set_speed_steps_per_second(stepper, speedValue);
+        } else {
+          Serial.print(speedString);
+          Serial.println(" is an invalid speed value.");
+        }
+      } else {
+        Serial.println("Invalid command format. Use 'STEPS <value>'.");
     }
 }
 

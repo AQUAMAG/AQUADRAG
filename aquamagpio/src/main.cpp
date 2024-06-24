@@ -41,8 +41,8 @@ void setup() {
 
   
   // Set the maximum speed and acceleration
-  stepper.setMaxSpeed(get_max_speed());
-  stepper.setAcceleration(get_max_speed() / 2);       // steps per second^2
+  stepper.setMaxSpeed(MAX_SPEED);
+  stepper.setAcceleration(MAX_SPEED / 2);       // steps per second^2
   stepper.setPinsInverted(false, false, true);  // invert direction
 
   // Set initial speed
@@ -83,6 +83,10 @@ void loop() {
       speed(&stepper, command);
     }
 
+    // Check for 'STEPS' command
+    else if (command.startsWith("steps")) {
+      steps(&stepper, command);
+    }
 
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {

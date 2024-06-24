@@ -20,7 +20,7 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.print("Microsteps global variable: ");
   Serial.println(driver->microsteps());
   Serial.print("Max speed: ");
-  Serial.println(get_max_speed());
+  Serial.println(MAX_SPEED);
   Serial.print("Microsteps driver register: ");
   Serial.println(driver->microsteps());
   Serial.print("Driver version: ");
@@ -60,10 +60,14 @@ void reset_to_last_speed(AccelStepper* stepper) {
   // print_debug_log();
 }
 
-void set_speed(AccelStepper* stepper, float mm_per_second) {
+void set_speed_mm_per_second(AccelStepper* stepper, float mm_per_second) {
   float steps = mm_to_steps(mm_per_second);
   stepper->setSpeed(steps);
   motor_speed_mms = mm_per_second;
+}
+
+void set_speed_steps_per_second(AccelStepper* stepper, float steps_per_second) {
+  stepper->setSpeed(steps_per_second);
 }
 
 void move_to(AccelStepper* stepper, long position) {

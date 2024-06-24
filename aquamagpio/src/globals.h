@@ -20,6 +20,7 @@ MotorState CURRENT_STATE = STOPPED;
 
 constexpr float full_steps_per_rotation = 200.0;
 constexpr float mm_per_rotation = 5.0;
+constexpr long MAX_SPEED = 1000.0;
 
 long get_steps_per_rotation() {
   long steps;
@@ -29,11 +30,6 @@ long get_steps_per_rotation() {
     steps = full_steps_per_rotation * MICROSTEPS;
   }
   return steps;
-}
-
-
-long get_max_speed() {
-  return get_steps_per_rotation() * 2;
 }
 
 float mm_to_steps(float mm) {
