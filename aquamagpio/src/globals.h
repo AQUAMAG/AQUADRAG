@@ -32,12 +32,6 @@ long get_steps_per_rotation() {
   return steps;
 }
 
-
-long get_max_speed() {
-  return MAX_SPEED;
-  // return get_steps_per_rotation() * 2;
-}
-
 float mm_to_steps(float mm) {
   return mm * static_cast<float>(get_steps_per_rotation()) / mm_per_rotation;
 }
