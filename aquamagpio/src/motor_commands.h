@@ -1,12 +1,13 @@
 #ifndef MOTOR_COMMANDS_H
 #define MOTOR_COMMANDS_H
 #include "motor_functions.h"
-
+#include "user_inputs.h"
 void stop_motor(AccelStepper* stepper) {
   //reset_direction(stepper);
   stepper->stop();
   CURRENT_STATE = STOPPED;
   Serial.println("Motor stopped.");
+  print_menu();
 }
 
 void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
@@ -18,6 +19,9 @@ void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
   
 }
 
+
+
+//todo fix speed to take in just a number or full command
 void speed(AccelStepper* stepper, String command) {
   //Serial.println(command);
   int indexOfSpace = command.indexOf(' ');

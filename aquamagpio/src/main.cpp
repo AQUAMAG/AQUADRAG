@@ -1,8 +1,9 @@
-#include "motor_commands.h"
 #include <AccelStepper.h>
 #include <ezButton.h>
 #include <SoftwareSerial.h>
 #include <TMCStepper.h>
+#include "motor_commands.h"
+
 
 
 ezButton homeLimitSwitch(9); // Home limit switch attached to pin 9
@@ -51,11 +52,12 @@ void setup() {
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
   print_debug_log(&stepper, &driver);
+  stop_motor(&stepper);
 }
 
-void loop() {
-  // Check if there is any input from the Serial Monitor
-  if (Serial.available() > 0) {
+
+
+void process_command(){
     String command = Serial.readStringUntil('\n');  // Read the input string
     command.toLowerCase();
     Serial.println("---------");
@@ -65,6 +67,7 @@ void loop() {
     // Check for 'STOP' command
     if (command.equals("stop")) {
       stop_motor(&stepper);
+
     }
 
     // Check for 'Print' command
@@ -74,8 +77,15 @@ void loop() {
 
     // Check for 'START' command
     else if (command.equals("start")) {
+      //Serial.println("Enter speed in mm/sec: ");
+      //wait_for_input();
+      command = Serial.readStringUntil('\n');
+      Serial.println(command);
+      speed(&stepper, command);
+      //todo make direction do something
+      // Serial.println("Enter direction (fwd/back): ");
+      // wait_for_input();
       start_motor(&stepper, &driver);
-
     }
 
     // Check for 'SPEED' command
@@ -92,18 +102,31 @@ void loop() {
     else if (command.startsWith("move")) {
       move(&stepper, command);
     }
+    //todo fix hardcoded move 0 for proper home command
+    // Check for 'HOME' command
+    else if (command.startsWith("home")) {
+      move(&stepper, "move 0");
+    }
 
+    //todo fix set home command
     // Check for 'MICRO' command
     else if (command.startsWith("micro")) {
       set_microsteps(&driver, command);
     }
-
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");
     }
     print_debug_log(&stepper, &driver);
-  }
+    
+
+
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+	  process_command();
+    }
 
   // Check if the limit switch is pressed
   homeLimitSwitch.loop(); 
