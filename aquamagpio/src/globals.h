@@ -36,6 +36,10 @@ float mm_to_steps(float mm) {
   return mm * static_cast<float>(get_steps_per_rotation()) / mm_per_rotation;
 }
 
+float steps_to_mm(float steps) {
+  return steps * mm_per_rotation / static_cast<float>(get_steps_per_rotation());
+}
+
 bool is_valid_microsteps(int n) {
     // Array of valid values for microsteps
     const int validValues[] = {0, 2, 4, 8, 16, 64, 128, 256};
@@ -50,7 +54,8 @@ bool is_valid_microsteps(int n) {
     return false;
 }
 
-float motor_speed_mms = 1.0; // mm per second
+// float motor_speed_mms = 1.0; // mm per second
+float MOTOR_SPEED = 40.0; // steps per second
 
 // Define the stepper and the pins it will use
 #define DIR_PIN 5

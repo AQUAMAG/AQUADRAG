@@ -15,7 +15,6 @@ void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
   CURRENT_STATE = RUNNING;
   Serial.println("Motor started.");
   print_debug_log(stepper, driver);
-  
 }
 
 void speed(AccelStepper* stepper, String command) {
