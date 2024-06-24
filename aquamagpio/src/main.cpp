@@ -83,6 +83,10 @@ void loop() {
       speed(&stepper, command);
     }
 
+    // Check for 'STEPS' command
+    else if (command.startsWith("steps")) {
+      steps(&stepper, command);
+    }
 
     // Check for 'MOVE' command
     else if (command.startsWith("move")) {

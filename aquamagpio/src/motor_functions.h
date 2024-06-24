@@ -60,10 +60,14 @@ void reset_to_last_speed(AccelStepper* stepper) {
   // print_debug_log();
 }
 
-void set_speed(AccelStepper* stepper, float mm_per_second) {
+void set_speed_mm_per_second(AccelStepper* stepper, float mm_per_second) {
   float steps = mm_to_steps(mm_per_second);
   stepper->setSpeed(steps);
   motor_speed_mms = mm_per_second;
+}
+
+void set_speed_steps_per_second(AccelStepper* stepper, float steps_per_second) {
+  stepper->setSpeed(steps_per_second);
 }
 
 void move_to(AccelStepper* stepper, long position) {
