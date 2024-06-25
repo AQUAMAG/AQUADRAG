@@ -59,6 +59,15 @@ void invert_direction(AccelStepper* stepper) {
 
 void reset_to_last_speed(AccelStepper* stepper) {
   stepper->setSpeed(MOTOR_SPEED_STEPS); 
+
+  #ifdef DEBUG
+  Serial.print("Setting speed to: ");
+  Serial.println(steps);
+  Serial.print("motor_speed_mms: ");
+  Serial.println(motor_speed_mms);
+  Serial.print("Motor Actual speed: ");
+  Serial.println(stepper->speed());
+  #endif
   //stepper.setSpeed(-steps);
   // print_debug_log();
 }
