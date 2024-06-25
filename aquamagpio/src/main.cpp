@@ -113,6 +113,12 @@ void process_command(){
     else if (command.startsWith("micro")) {
       set_microsteps(&driver, command);
     }
+
+    // Check for 'ANGLE' command
+    else if (command.startsWith("angle")) {
+      set_angle(&driver, command);
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");

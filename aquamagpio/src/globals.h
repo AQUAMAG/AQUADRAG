@@ -5,6 +5,8 @@
 
 #define DEBUG
 
+float THETA = 0.0;
+
 float motor_speed_mms = 1.0; // mm per second
 
 // Define the stepper and the pins it will use
