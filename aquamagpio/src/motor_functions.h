@@ -62,9 +62,9 @@ void reset_to_last_speed(AccelStepper* stepper) {
 
   #ifdef DEBUG
   Serial.print("Setting speed to: ");
-  Serial.println(steps);
+  Serial.println(MOTOR_SPEED_STEPS);
   Serial.print("motor_speed_mms: ");
-  Serial.println(motor_speed_mms);
+  Serial.println(steps_to_mm(MOTOR_SPEED_STEPS));
   Serial.print("Motor Actual speed: ");
   Serial.println(stepper->speed());
   #endif
