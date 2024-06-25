@@ -47,7 +47,7 @@ void setup() {
   stepper.setPinsInverted(false, false, true);  // invert direction
 
   // Set initial speed
-  stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
+  stepper.setSpeed(MOTOR_SPEED_STEPS);  // steps per second
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
@@ -159,8 +159,7 @@ void loop() {
   switch (CURRENT_STATE) {
 
     case HOME_LIMIT:
-      motor_speed_mms = 0.25;
-      reset_to_last_speed(&stepper);
+      set_speed_mm_per_second(&stepper, 0.25);
       stepper.runSpeed();
         if(homeLimitSwitch.isReleased()) {
           stop_motor(&stepper);
@@ -173,8 +172,7 @@ void loop() {
       break;
 
     case END_LIMIT:
-    motor_speed_mms = -0.25;//set motor speed to 0.25 mm/s
-    reset_to_last_speed(&stepper);
+    set_speed_mm_per_second(&stepper, -0.25);//set motor speed to 0.25 mm/s
       stepper.runSpeed(); //start the motor and run until the limit switch is released
       if(endLimitSwitch.isReleased()) {
         stop_motor(&stepper);
