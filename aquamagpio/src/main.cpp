@@ -100,6 +100,11 @@ void process_command(){
       set_angle(command);
     }
 
+    // Check for 'PULL' command
+    else if (command.startsWith("pull")) {
+      pull(&stepper, &driver, command);
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");
