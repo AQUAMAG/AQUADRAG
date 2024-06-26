@@ -104,6 +104,7 @@ void process_command(){
       Serial.println("Unknown command.");
     }
     print_debug_log(&stepper, &driver);
+    Serial.print("Free memory: "); Serial.println(freeMemory());
 }
 
 void loop() {

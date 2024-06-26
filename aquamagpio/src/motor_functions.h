@@ -2,19 +2,26 @@
 #define MOTOR_FUNCTIONS_H
 #include "globals.h"
 
+int freeMemory() {
+  extern int __heap_start, *__brkval;
+  int v;
+  return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+}
+
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println("---------");
-  Serial.print("Position           : "); Serial.println(stepper->currentPosition());
-  Serial.print("Target             : "); Serial.println(stepper->targetPosition());
-  Serial.print("Motor speed actual : "); Serial.print(stepper->speed());  Serial.println(" (steps/sec)");
-  Serial.print("Motor speed global : "); Serial.print(MOTOR_SPEED_STEPS); Serial.println(" (steps/sec)");
-  Serial.print("Actuator speed     : "); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
-  Serial.print("Current            : "); Serial.print(driver->rms_current()); Serial.println(" (mA)");
-  Serial.print("Microsteps global  : "); Serial.println(MICROSTEPS);
-  Serial.print("Max speed          : "); Serial.println(MAX_SPEED);
-  Serial.print("Microsteps driver  : "); Serial.println(driver->microsteps());
-  Serial.print("Driver version     : "); Serial.println(driver->version(), HEX);
-  Serial.print("State: ");
+  Serial.print("Position       : "); Serial.println(stepper->currentPosition());
+  Serial.print("Target         : "); Serial.println(stepper->targetPosition());
+  Serial.print("Mtr spd actual : "); Serial.print(stepper->speed());  Serial.println(" (steps/sec)");
+  Serial.print("Mtr spd global : "); Serial.print(MOTOR_SPEED_STEPS); Serial.println(" (steps/sec)");
+  Serial.print("Actuator speed : "); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
+  Serial.print("Current        : "); Serial.print(driver->rms_current()); Serial.println(" (mA)");
+  Serial.print("Mcrstps global : "); Serial.println(MICROSTEPS);
+  Serial.print("Mcrstps driver : "); Serial.println(driver->microsteps());
+  Serial.print("Max speed      : "); Serial.println(MAX_SPEED);
+  Serial.print("Angle          : "); Serial.println(THETA);
+  Serial.print("Driver version : "); Serial.println(driver->version(), HEX);
+  Serial.print("State          : ");
   switch (CURRENT_STATE) {
     case HOME_LIMIT:    Serial.println("HOME_LIMIT");    break;
     case END_LIMIT:     Serial.println("END_LIMIT");     break;
@@ -24,6 +31,7 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   }
   Serial.println("---------");
   Serial.println(" ");
+  Serial.print("Free memory: "); Serial.println(freeMemory());
 }
 
 void invert_direction(AccelStepper* stepper) {
