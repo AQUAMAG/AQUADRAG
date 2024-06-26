@@ -1,38 +1,15 @@
-#include <AccelStepper.h>
-#include <ezButton.h>
-#include <SoftwareSerial.h>
-#include <TMCStepper.h>
+#include "globals.h"
 #include "motor_commands.h"
-
-
-
-ezButton homeLimitSwitch(9); // Home limit switch attached to pin 9
-ezButton endLimitSwitch(10); // End limit switch attached to pin 10;
-
-// Create an AccelStepper object
-AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
-
-// Create a SoftwareSerial object for UART communication
-SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
-
-#define driverA_ADDRESS 0b00 //Pins MS1 and MS2 connected to GND.
-
-// Create a TMC2209Stepper object
-TMC2209Stepper driver = TMC2209Stepper(&Serial1, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
 
 void setup() {
   homeLimitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
   endLimitSwitch.setDebounceTime(50);
   Serial.begin(115200);
-  Serial1.begin(57600);
+  UART.begin(57600);
 
   driver.begin();
 
-  while(driver.version() != 0x21) {
-    Serial.println("UART communication failed. Retrying...");
-    delay(2000);
-  }
-  Serial.println("UART communication established.");
+  verify_UART_connection();
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
@@ -58,6 +35,9 @@ void setup() {
 
 
 void process_command(){
+
+    verify_UART_connection();
+
     String command = Serial.readStringUntil('\n');  // Read the input string
     command.toLowerCase();
     Serial.println("---------");
@@ -124,9 +104,6 @@ void process_command(){
       Serial.println("Unknown command.");
     }
     print_debug_log(&stepper, &driver);
-    
-
-
 }
 
 void loop() {

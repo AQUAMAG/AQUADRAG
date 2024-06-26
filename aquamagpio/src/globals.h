@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 #include <AccelStepper.h>
+#include <ezButton.h>
+#include <SoftwareSerial.h>
 #include <TMCStepper.h>
 
 #define DEBUG
@@ -16,6 +18,23 @@ int MICROSTEPS = 256;
 #define STEP_PIN 2
 #define RX_PIN 3 // Step Pulse Y-axis pin per CNC shield pin-out
 #define TX_PIN 6 // Direction Y-axis pin per CNC shield pin-out
+
+
+ezButton homeLimitSwitch(9); // Home limit switch attached to pin 9
+ezButton endLimitSwitch(10); // End limit switch attached to pin 10;
+
+// Create an AccelStepper object
+AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
+
+// Create a SoftwareSerial object for UART communication
+SoftwareSerial UART(RX_PIN, TX_PIN); // RX, TX
+
+#define driverA_ADDRESS 0b00 //Pins MS1 and MS2 connected to GND.
+
+// Create a TMC2209Stepper object
+TMC2209Stepper driver = TMC2209Stepper(&UART, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
+
+
 
 enum MotorState {
   HOME_LIMIT,
