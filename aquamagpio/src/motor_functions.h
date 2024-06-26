@@ -87,11 +87,11 @@ void set_effective_speed_mm_per_second(AccelStepper* stepper, float mm_per_secon
   stepper->setSpeed(MOTOR_SPEED_STEPS);
 
   #ifdef DEBUG
-  Serial.print(F("Angle Rad: "     )); Serial.println(degrees_to_radians(THETA));
-  Serial.print(F("Cos angle: "     )); Serial.println(cos(degrees_to_radians(THETA)));
-  Serial.print(F("Speed: "         )); Serial.println(mm_per_second);
-  Serial.print(F("Adjusted speed: ")); Serial.println(adjusted_speed);
-  Serial.print(F("Actuator speed: ")); Serial.println(steps_to_mm(MOTOR_SPEED_STEPS));
+  Serial.print(F("Angle Deg      : ")); Serial.println(THETA);
+  Serial.print(F("Angle Rad      : ")); Serial.println(degrees_to_radians(THETA));
+  Serial.print(F("Cos(angle)     : ")); Serial.println(cos(degrees_to_radians(THETA)));
+  Serial.print(F("Speed          : ")); Serial.println(mm_per_second);
+  Serial.print(F("Adjusted speed : ")); Serial.println(adjusted_speed);
   #endif
 }
 
