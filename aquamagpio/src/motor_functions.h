@@ -9,7 +9,6 @@ int freeMemory() {
 }
 
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
-  char buffer[30]; // Ensure this is large enough to hold your string
   Serial.println(F("---------"));
   Serial.print(F("Position           : ")); Serial.println(stepper->currentPosition());
   Serial.print(F("Target             : ")); Serial.println(stepper->targetPosition());
