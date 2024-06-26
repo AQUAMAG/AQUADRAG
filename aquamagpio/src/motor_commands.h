@@ -122,7 +122,7 @@ void pull(AccelStepper* stepper, TMC2209Stepper* driver, String command) {
     String speedString = command.substring(indexOfSpace + 1);
     float speedValue = speedString.toFloat();
     if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-      ;
+      set_effective_speed_mm_per_second(stepper, speedValue);
     } else {
       Serial.print(speedString);
       Serial.println(F(" is an invalid pull value."));
