@@ -9,29 +9,29 @@ int freeMemory() {
 }
 
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
+  char buffer[30]; // Ensure this is large enough to hold your string
   Serial.println("---------");
-  Serial.print("Position       : "); Serial.println(stepper->currentPosition());
-  Serial.print("Target         : "); Serial.println(stepper->targetPosition());
-  Serial.print("Mtr spd actual : "); Serial.print(stepper->speed());  Serial.println(" (steps/sec)");
-  Serial.print("Mtr spd global : "); Serial.print(MOTOR_SPEED_STEPS); Serial.println(" (steps/sec)");
-  Serial.print("Actuator speed : "); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
-  Serial.print("Current        : "); Serial.print(driver->rms_current()); Serial.println(" (mA)");
-  Serial.print("Mcrstps global : "); Serial.println(MICROSTEPS);
-  Serial.print("Mcrstps driver : "); Serial.println(driver->microsteps());
-  Serial.print("Max speed      : "); Serial.println(MAX_SPEED);
-  Serial.print("Angle          : "); Serial.println(THETA);
-  Serial.print("Driver version : "); Serial.println(driver->version(), HEX);
-  Serial.print("State          : ");
+  strcpy_P(buffer, DEBUG_POSITION      ); Serial.print(buffer); Serial.println(stepper->currentPosition());
+  strcpy_P(buffer, DEBUG_TARGET        ); Serial.print(buffer); Serial.println(stepper->targetPosition());
+  strcpy_P(buffer, DEBUG_SPEED_ACTUAL  ); Serial.print(buffer); Serial.print(stepper->speed());  Serial.println(" (steps/sec)");
+  strcpy_P(buffer, DEBUG_SPEED_GLOBAL  ); Serial.print(MOTOR_SPEED_STEPS); Serial.println(" (steps/sec)");
+  strcpy_P(buffer, DEBUG_ACTUATOR_SPEED); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
+  strcpy_P(buffer, DEBUG_CURRENT       ); Serial.print(driver->rms_current()); Serial.println(" (mA)");
+  strcpy_P(buffer, DEBUG_MCRSTPS_GLBL  ); Serial.println(MICROSTEPS);
+  strcpy_P(buffer, DEBUG_MCRSTPS_DRVR  ); Serial.println(driver->microsteps());
+  strcpy_P(buffer, DEBUG_MAX_SPEED     ); Serial.println(MAX_SPEED);
+  strcpy_P(buffer, DEBUG_ANGLE         ); Serial.println(THETA);
+  strcpy_P(buffer, DEBUG_DRIVER_VERSION); Serial.println(driver->version(), HEX);
+  strcpy_P(buffer, DEBUG_STATE         );
   switch (CURRENT_STATE) {
-    case HOME_LIMIT:    Serial.println("HOME_LIMIT");    break;
-    case END_LIMIT:     Serial.println("END_LIMIT");     break;
-    case RUNNING:       Serial.println("RUNNING");       break;
-    case MOVE_POSITION: Serial.println("MOVE_POSITION"); break;
-    case STOPPED:       Serial.println("STOPPED");       break;
+    case HOME_LIMIT:    strcpy_P(buffer, DEBUG_HOME_LIMIT   );Serial.println(buffer); break;
+    case END_LIMIT:     strcpy_P(buffer, DEBUG_END_LIMIT    );Serial.println(buffer); break;
+    case RUNNING:       strcpy_P(buffer, DEBUG_RUNNING      );Serial.println(buffer); break;
+    case MOVE_POSITION: strcpy_P(buffer, DEBUG_MOVE_POSITION);Serial.println(buffer); break;
+    case STOPPED:       strcpy_P(buffer, DEBUG_STOPPED      );Serial.println(buffer); break;
   }
   Serial.println("---------");
   Serial.println(" ");
-  Serial.print("Free memory: "); Serial.println(freeMemory());
 }
 
 void invert_direction(AccelStepper* stepper) {

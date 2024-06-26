@@ -51,6 +51,25 @@ constexpr float full_steps_per_rotation = 200.0;
 constexpr float mm_per_rotation = 5.0;
 constexpr long MAX_SPEED = 10240.0; // steps per second when actuator is moving at 1 mm/s with 256 microsteps
 
+const char DEBUG_POSITION[]         PROGMEM = "Position     : ";
+const char DEBUG_TARGET[]           PROGMEM = "Target       : ";
+const char DEBUG_SPEED_ACTUAL[]     PROGMEM = "Mtr spd actl : ";
+const char DEBUG_SPEED_GLOBAL[]     PROGMEM = "Mtr spd glbl : ";
+const char DEBUG_ACTUATOR_SPEED[]   PROGMEM = "Actuator spd : ";
+const char DEBUG_CURRENT[]          PROGMEM = "Current      : ";
+const char DEBUG_MCRSTPS_GLBL[]     PROGMEM = "Mcrstps glbl : ";
+const char DEBUG_MCRSTPS_DRVR[]     PROGMEM = "Mcrstps drvr : ";
+const char DEBUG_MAX_SPEED[]        PROGMEM = "Max speed    : ";
+const char DEBUG_ANGLE[]            PROGMEM = "Angle        : ";
+const char DEBUG_DRIVER_VERSION[]   PROGMEM = "Driver vrsn  : ";
+const char DEBUG_STATE[]            PROGMEM = "State        : ";
+
+const char DEBUG_HOME_LIMIT[]       PROGMEM = "HOME_LIMIT";   
+const char DEBUG_END_LIMIT[]        PROGMEM = "END_LIMIT";    
+const char DEBUG_RUNNING[]          PROGMEM = "RUNNING";      
+const char DEBUG_MOVE_POSITION[]    PROGMEM = "MOVE_POSITION";
+const char DEBUG_STOPPED[]          PROGMEM = "STOPPED";      
+
 long get_steps_per_rotation() {
   long steps;
   if(MICROSTEPS == 0) {

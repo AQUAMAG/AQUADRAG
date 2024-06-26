@@ -29,6 +29,7 @@ void setup() {
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
   print_debug_log(&stepper, &driver);
+
   stop_motor(&stepper);
 }
 
