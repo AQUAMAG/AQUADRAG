@@ -13,16 +13,17 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println("---------");
   strcpy_P(buffer, DEBUG_POSITION      ); Serial.print(buffer); Serial.println(stepper->currentPosition());
   strcpy_P(buffer, DEBUG_TARGET        ); Serial.print(buffer); Serial.println(stepper->targetPosition());
-  strcpy_P(buffer, DEBUG_SPEED_ACTUAL  ); Serial.print(buffer); Serial.print(stepper->speed());  Serial.println(" (steps/sec)");
-  strcpy_P(buffer, DEBUG_SPEED_GLOBAL  ); Serial.print(MOTOR_SPEED_STEPS); Serial.println(" (steps/sec)");
-  strcpy_P(buffer, DEBUG_ACTUATOR_SPEED); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
-  strcpy_P(buffer, DEBUG_CURRENT       ); Serial.print(driver->rms_current()); Serial.println(" (mA)");
-  strcpy_P(buffer, DEBUG_MCRSTPS_GLBL  ); Serial.println(MICROSTEPS);
-  strcpy_P(buffer, DEBUG_MCRSTPS_DRVR  ); Serial.println(driver->microsteps());
-  strcpy_P(buffer, DEBUG_MAX_SPEED     ); Serial.println(MAX_SPEED);
-  strcpy_P(buffer, DEBUG_ANGLE         ); Serial.println(THETA);
-  strcpy_P(buffer, DEBUG_DRIVER_VERSION); Serial.println(driver->version(), HEX);
-  strcpy_P(buffer, DEBUG_STATE         );
+  strcpy_P(buffer, DEBUG_SPEED_ACTUAL  ); Serial.print(buffer); Serial.print(stepper->speed());               Serial.println(" (steps/sec)");
+  strcpy_P(buffer, DEBUG_SPEED_GLOBAL  ); Serial.print(buffer); Serial.print(MOTOR_SPEED_STEPS);              Serial.println(" (steps/sec)");
+  strcpy_P(buffer, DEBUG_ACTUATOR_SPEED); Serial.print(buffer); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
+  strcpy_P(buffer, DEBUG_CURRENT       ); Serial.print(buffer); Serial.print(driver->rms_current());          Serial.println(" (mA)");
+  strcpy_P(buffer, DEBUG_MCRSTPS_GLBL  ); Serial.print(buffer); Serial.println(MICROSTEPS);
+  strcpy_P(buffer, DEBUG_MCRSTPS_DRVR  ); Serial.print(buffer); Serial.println(driver->microsteps());
+  strcpy_P(buffer, DEBUG_MAX_SPEED     ); Serial.print(buffer); Serial.println(MAX_SPEED);
+  strcpy_P(buffer, DEBUG_ANGLE         ); Serial.print(buffer); Serial.print(THETA);                          Serial.println(" (degrees)");
+  strcpy_P(buffer, DEBUG_FREE_MEMORY   ); Serial.print(buffer); Serial.print(freeMemory());                   Serial.println(" (bytes)");
+  strcpy_P(buffer, DEBUG_DRIVER_VERSION); Serial.print(buffer); Serial.println(driver->version(), HEX);
+  strcpy_P(buffer, DEBUG_STATE         ); Serial.print(buffer);
   switch (CURRENT_STATE) {
     case HOME_LIMIT:    strcpy_P(buffer, DEBUG_HOME_LIMIT   );Serial.println(buffer); break;
     case END_LIMIT:     strcpy_P(buffer, DEBUG_END_LIMIT    );Serial.println(buffer); break;
