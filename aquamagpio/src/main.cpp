@@ -14,8 +14,7 @@ void setup() {
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
   driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
-  // driver.rms_current(uint16_t mA)
-
+  //driver.rms_current(1000); // Set the current limit in mA
 
   
   // Set the maximum speed and acceleration
@@ -86,10 +85,9 @@ void process_command(){
     //todo fix hardcoded move 0 for proper home command
     // Check for 'HOME' command
     else if (command.startsWith(F("home"))) {
-      move(&stepper, "move 0");
+      home_motor();
     }
 
-    //todo fix set home command
     // Check for 'MICRO' command
     else if (command.startsWith(F("micro"))) {
       set_microsteps(&driver, command);
@@ -141,11 +139,12 @@ void loop() {
   switch (CURRENT_STATE) {
 
     case HOME_LIMIT:
-      set_speed_mm_per_second(&stepper, 0.25);
+      set_speed_mm_per_second(&stepper, 0.5);
       stepper.runSpeed();
         if(homeLimitSwitch.isReleased()) {
           stop_motor(&stepper);
           stepper.setCurrentPosition(0);
+          driver.microsteps(MICROSTEPS); //Set driver microsteps back to original value
 
           #ifdef DEBUG
           Serial.println(F("Home limit is released."));
@@ -154,7 +153,7 @@ void loop() {
       break;
 
     case END_LIMIT:
-    set_speed_mm_per_second(&stepper, -0.25);//set motor speed to 0.25 mm/s
+    set_speed_mm_per_second(&stepper, -0.5);//set motor speed to 0.25 mm/s
       stepper.runSpeed(); //start the motor and run until the limit switch is released
       if(endLimitSwitch.isReleased()) {
         stop_motor(&stepper);

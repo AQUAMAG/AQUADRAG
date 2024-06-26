@@ -59,10 +59,10 @@ const char DEBUG_STOPPED[]          PROGMEM = "STOPPED";
 
 long get_steps_per_rotation() {
   long steps;
-  if(MICROSTEPS == 0) {
+  if(driver.microsteps() == 0) {
     steps = 200;
   } else {
-    steps = full_steps_per_rotation * MICROSTEPS;
+    steps = full_steps_per_rotation * driver.microsteps();
   }
   return steps;
 }
