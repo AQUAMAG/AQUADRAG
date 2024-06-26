@@ -6,40 +6,39 @@
 #include "user_inputs.h"
 
 
-void stop_motor(AccelStepper* stepper) {
-  //reset_direction(stepper);
-  stepper->stop();
+void stop_motor() {
+  STEPPER.stop();
   CURRENT_STATE = STOPPED;
   Serial.println(F("Motor stopped."));
   print_menu();
 }
 
-void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
+void start_motor() {
   // print_debug_log();
-  reset_to_last_speed(stepper);
+  reset_to_last_speed();
   CURRENT_STATE = RUNNING;
   Serial.println(F("Motor started."));
-  print_debug_log(stepper, driver);
+  print_debug_log();
 }
 
 
 void home_motor(){
-   MICROSTEPS = driver.microsteps(); //Get current microsteps
-      driver.microsteps(0); //Set driver microsteps to 0 AT THIS MOMENT GLOBAL VARIABLE IS NOT UPDATED!
-      set_speed_mm_per_second(&stepper, -5.0); //set motor speed to 15 mm/s for quick homing
-      start_motor(&stepper, &driver);
+   MICROSTEPS = DRIVER.microsteps(); //Get current microsteps
+      DRIVER.microsteps(0); //Set driver microsteps to 0 AT THIS MOMENT GLOBAL VARIABLE IS NOT UPDATED!
+      set_speed_mm_per_second(-5.0); //set motor speed to 15 mm/s for quick homing
+      start_motor();
 }
 
 
 //todo fix speed to take in just a number or full command
-void speed(AccelStepper* stepper, String command) {
+void speed(String command) {
   //Serial.println(command);
   int indexOfSpace = command.indexOf(' ');
       if (indexOfSpace != -1) {
         String speedString = command.substring(indexOfSpace + 1);
         float speedValue = speedString.toFloat();
         if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-          set_speed_mm_per_second(stepper, speedValue);
+          set_speed_mm_per_second(speedValue);
         } else {
           Serial.print(speedString);
           Serial.println(F(" is an invalid speed value."));
@@ -49,14 +48,14 @@ void speed(AccelStepper* stepper, String command) {
     }
 }
 
-void steps(AccelStepper* stepper, String command) {
+void steps(String command) {
   //Serial.println(command);
   int indexOfSpace = command.indexOf(' ');
       if (indexOfSpace != -1) {
         String speedString = command.substring(indexOfSpace + 1);
         float speedValue = speedString.toFloat();
         if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-          set_speed_steps_per_second(stepper, speedValue);
+          set_speed_steps_per_second(speedValue);
         } else {
           Serial.print(speedString);
           Serial.println(F(" is an invalid speed value."));
@@ -66,12 +65,12 @@ void steps(AccelStepper* stepper, String command) {
     }
 }
 
-void move(AccelStepper* stepper, String command) {
+void move(String command) {
   int indexOfSpace = command.indexOf(' ');
   if (indexOfSpace != -1) {
       String positionString = command.substring(indexOfSpace + 1);
       long position = positionString.toInt();
-      move_to(stepper, position);
+      move_to(position);
       Serial.println(F("new position to move to is: "));
       Serial.println(position);
       // stepper.setSpeed(motor_speed);
@@ -80,7 +79,7 @@ void move(AccelStepper* stepper, String command) {
     }
 }
 
-void set_microsteps(TMC2209Stepper* driver, String command) {
+void set_microsteps(String command) {
   int indexOfSpace = command.indexOf(' ');
   if (indexOfSpace != -1) {
     String microstepString = command.substring(indexOfSpace + 1);
@@ -91,11 +90,11 @@ void set_microsteps(TMC2209Stepper* driver, String command) {
       #endif
     if (is_valid_microsteps(microstepValue)) {
       MICROSTEPS = microstepValue;
-      driver->microsteps(MICROSTEPS);
+      DRIVER.microsteps(MICROSTEPS);
 
       #ifdef DEBUG
       Serial.print(F("Microsteps driver actual value: "));
-      Serial.println(driver->microsteps());
+      Serial.println(DRIVER.microsteps());
       Serial.print(F("Microsteps global set value: "));
       Serial.println(MICROSTEPS);
       #endif
@@ -125,13 +124,13 @@ void set_angle(String command) {
   }
 }
 
-void pull(AccelStepper* stepper, TMC2209Stepper* driver, String command) {
+void pull(String command) {
   int indexOfSpace = command.indexOf(' ');
   if (indexOfSpace != -1) {
     String speedString = command.substring(indexOfSpace + 1);
     float speedValue = speedString.toFloat();
     if (speedValue != 0.0 || speedString == "0" || speedString == "0.0") {
-      set_effective_speed_mm_per_second(stepper, speedValue);
+      set_effective_speed_mm_per_second(speedValue);
     } else {
       Serial.print(speedString);
       Serial.println(F(" is an invalid pull value."));

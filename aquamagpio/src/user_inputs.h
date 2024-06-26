@@ -24,7 +24,7 @@ void print_menu(){
 }
 
 void verify_UART_connection(){
-  while(driver.version() != 0x21) {
+  while(DRIVER.version() != 0x21) {
     Serial.println("UART communication failed. Retrying...");
     delay(2000);
   }
