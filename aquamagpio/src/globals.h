@@ -20,8 +20,8 @@ int MICROSTEPS = 256;
 #define TX_PIN 6 // Direction Y-axis pin per CNC shield pin-out
 
 
-ezButton homeLimitSwitch(9); // Home limit switch attached to pin 9
-ezButton endLimitSwitch(10); // End limit switch attached to pin 10;
+ezButton homeLimitSwitch(10); // Home limit switch attached to pin 9
+ezButton endLimitSwitch(9); // End limit switch attached to pin 10;
 
 // Create an AccelStepper object
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
