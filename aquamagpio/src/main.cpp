@@ -1,82 +1,62 @@
-#include <AccelStepper.h>
-#include <ezButton.h>
-#include <SoftwareSerial.h>
-#include <TMCStepper.h>
+#include "globals.h"
 #include "motor_commands.h"
-
-
-
-ezButton homeLimitSwitch(9); // Home limit switch attached to pin 9
-ezButton endLimitSwitch(10); // End limit switch attached to pin 10;
-
-// Create an AccelStepper object
-AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
-
-// Create a SoftwareSerial object for UART communication
-SoftwareSerial Serial1(RX_PIN, TX_PIN); // RX, TX
-
-#define driverA_ADDRESS 0b00 //Pins MS1 and MS2 connected to GND.
-
-// Create a TMC2209Stepper object
-TMC2209Stepper driver = TMC2209Stepper(&Serial1, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
 
 void setup() {
   homeLimitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
   endLimitSwitch.setDebounceTime(50);
   Serial.begin(115200);
-  Serial1.begin(57600);
+  UART.begin(57600);
 
   driver.begin();
 
-  while(driver.version() != 0x21) {
-    Serial.println("UART communication failed. Retrying...");
-    delay(2000);
-  }
-  Serial.println("UART communication established.");
+  verify_UART_connection();
 
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
   driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
-  // driver.rms_current(uint16_t mA)
-
+  //driver.rms_current(1000); // Set the current limit in mA
 
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(MAX_SPEED);
   stepper.setAcceleration(MAX_SPEED / 2);       // steps per second^2
-  stepper.setPinsInverted(false, false, true);  // invert direction
+  stepper.setPinsInverted(true, false, true);  // invert direction
 
   // Set initial speed
-  stepper.setSpeed(mm_to_steps(motor_speed_mms));  // steps per second
+  stepper.setSpeed(MOTOR_SPEED_STEPS);  // steps per second
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
   print_debug_log(&stepper, &driver);
+
   stop_motor(&stepper);
 }
 
 
 
 void process_command(){
+
+    verify_UART_connection();
+
     String command = Serial.readStringUntil('\n');  // Read the input string
     command.toLowerCase();
-    Serial.println("---------");
+    Serial.println(F("---------"));
     Serial.println(command);
-    Serial.println("---------");
+    Serial.println(F("---------"));
 
     // Check for 'STOP' command
-    if (command.equals("stop")) {
+    if (command.equals(F("stop"))) {
       stop_motor(&stepper);
 
     }
 
     // Check for 'Print' command
-    else if (command.equals("print")) {
+    else if (command.equals(F("print"))) {
       print_debug_log(&stepper, &driver);
     }
 
     // Check for 'START' command
-    else if (command.equals("start")) {
+    else if (command.equals(F("start"))) {
       //Serial.println("Enter speed in mm/sec: ");
       //wait_for_input();
       command = Serial.readStringUntil('\n');
@@ -89,38 +69,45 @@ void process_command(){
     }
 
     // Check for 'SPEED' command
-    else if (command.startsWith("speed")) {
+    else if (command.startsWith(F("speed"))) {
       speed(&stepper, command);
     }
 
     // Check for 'STEPS' command
-    else if (command.startsWith("steps")) {
+    else if (command.startsWith(F("steps"))) {
       steps(&stepper, command);
     }
 
     // Check for 'MOVE' command
-    else if (command.startsWith("move")) {
+    else if (command.startsWith(F("move"))) {
       move(&stepper, command);
     }
     //todo fix hardcoded move 0 for proper home command
     // Check for 'HOME' command
-    else if (command.startsWith("home")) {
-      move(&stepper, "move 0");
+    else if (command.startsWith(F("home"))) {
+      home_motor();
     }
 
-    //todo fix set home command
     // Check for 'MICRO' command
-    else if (command.startsWith("micro")) {
+    else if (command.startsWith(F("micro"))) {
       set_microsteps(&driver, command);
     }
+
+    // Check for 'ANGLE' command
+    else if (command.startsWith(F("angle"))) {
+      set_angle(command);
+    }
+
+    // Check for 'PULL' command
+    else if (command.startsWith(F("pull"))) {
+      pull(&stepper, &driver, command);
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
-      Serial.println("Unknown command.");
+      Serial.println(F("Unknown command."));
     }
     print_debug_log(&stepper, &driver);
-    
-
-
 }
 
 void loop() {
@@ -134,7 +121,7 @@ void loop() {
 
   if(homeLimitSwitch.isPressed()) {
     #ifdef DEBUG
-          Serial.println("Home limit is pressed.");
+          Serial.println(F("Home limit is pressed."));
     #endif
     stop_motor(&stepper); //if home motor is
     CURRENT_STATE = HOME_LIMIT;
@@ -142,45 +129,36 @@ void loop() {
 
   if(endLimitSwitch.isPressed()) {
     #ifdef DEBUG
-          Serial.println("End limit is pressed.");
+          Serial.println(F("End limit is pressed."));
     #endif
     stop_motor(&stepper); //if home motor is
     CURRENT_STATE = END_LIMIT;
   }
 
-
-
-  // int state = limitSwitch.getState();
-  // if(state == HIGH)
-  //   Serial.println("The limit switch: UNTOUCHED");
-  // else
-  //   Serial.println("The limit switch: TOUCHED");
-
   switch (CURRENT_STATE) {
 
     case HOME_LIMIT:
-      motor_speed_mms = 0.25;
-      reset_to_last_speed(&stepper);
+      set_speed_mm_per_second(&stepper, 0.5);
       stepper.runSpeed();
         if(homeLimitSwitch.isReleased()) {
           stop_motor(&stepper);
           stepper.setCurrentPosition(0);
+          driver.microsteps(MICROSTEPS); //Set driver microsteps back to original value
 
           #ifdef DEBUG
-          Serial.println("Home limit is released.");
+          Serial.println(F("Home limit is released."));
           #endif
         }
       break;
 
     case END_LIMIT:
-    motor_speed_mms = -0.25;//set motor speed to 0.25 mm/s
-    reset_to_last_speed(&stepper);
+    set_speed_mm_per_second(&stepper, -0.5);//set motor speed to 0.25 mm/s
       stepper.runSpeed(); //start the motor and run until the limit switch is released
       if(endLimitSwitch.isReleased()) {
         stop_motor(&stepper);
 
         #ifdef DEBUG
-        Serial.println("End limit is released.");
+        Serial.println(F("End limit is released."));
         #endif
       }
       break;
