@@ -5,49 +5,23 @@
 
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println("---------");
-  Serial.print("Position: ");
-  Serial.println(stepper->currentPosition());
-  Serial.print("Target: ");
-  Serial.println(stepper->targetPosition());
-  Serial.println("Motor speed actual: ");
-  Serial.print(stepper->speed());
-  Serial.println(" (steps/sec)");
-  Serial.println("Motor speed global: ");
-  Serial.print(MOTOR_SPEED_STEPS);
-  Serial.println(" (steps/sec)");
-  Serial.print("Actuator pull speed: ");
-  Serial.print(steps_to_mm(MOTOR_SPEED_STEPS));
-  Serial.println(" (mm/sec)");
-  Serial.print("Current: ");
-  Serial.print(driver->rms_current());
-  Serial.println(" (mA)");
-  Serial.print("Microsteps global variable: ");
-  Serial.println(MICROSTEPS);
-  Serial.print("Max speed: ");
-  Serial.println(MAX_SPEED);
-  Serial.print("Microsteps driver register: ");
-  Serial.println(driver->microsteps());
-  Serial.print("Driver version: ");
-  auto version = driver->version();
-  Serial.println(version, HEX);
+  Serial.print("Position           : "); Serial.println(stepper->currentPosition());
+  Serial.print("Target             : "); Serial.println(stepper->targetPosition());
+  Serial.print("Motor speed actual : "); Serial.print(stepper->speed());  Serial.println(" (steps/sec)");
+  Serial.print("Motor speed global : "); Serial.print(MOTOR_SPEED_STEPS); Serial.println(" (steps/sec)");
+  Serial.print("Actuator speed     : "); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(" (mm/sec)");
+  Serial.print("Current            : "); Serial.print(driver->rms_current()); Serial.println(" (mA)");
+  Serial.print("Microsteps global  : "); Serial.println(MICROSTEPS);
+  Serial.print("Max speed          : "); Serial.println(MAX_SPEED);
+  Serial.print("Microsteps driver  : "); Serial.println(driver->microsteps());
+  Serial.print("Driver version     : "); Serial.println(driver->version(), HEX);
   Serial.print("State: ");
   switch (CURRENT_STATE) {
-    case HOME_LIMIT:
-      Serial.println("HOME_LIMIT");
-      break;
-    case END_LIMIT:
-      Serial.println("END_LIMIT");
-      break;
-    case RUNNING:
-      Serial.println("RUNNING");
-      break;
-
-    case MOVE_POSITION:
-      Serial.println("MOVE_POSITION");
-      break;
-
-    case STOPPED:
-      Serial.println("STOPPED");
+    case HOME_LIMIT:    Serial.println("HOME_LIMIT");    break;
+    case END_LIMIT:     Serial.println("END_LIMIT");     break;
+    case RUNNING:       Serial.println("RUNNING");       break;
+    case MOVE_POSITION: Serial.println("MOVE_POSITION"); break;
+    case STOPPED:       Serial.println("STOPPED");       break;
   }
   Serial.println("---------");
   Serial.println(" ");

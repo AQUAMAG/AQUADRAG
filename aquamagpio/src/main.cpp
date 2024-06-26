@@ -116,7 +116,7 @@ void process_command(){
 
     // Check for 'ANGLE' command
     else if (command.startsWith("angle")) {
-      set_angle(&driver, command);
+      set_angle(command);
     }
 
     // todo setCurrentPosition(currentPosition);

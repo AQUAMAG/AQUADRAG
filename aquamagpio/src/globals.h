@@ -7,11 +7,7 @@
 
 float THETA = 0.0;
 
-float THETA = 0.0;
-
-
-// float motor_speed_mms = 1.0; // mm per second
-float MOTOR_SPEED_STEPS = 40.0; // steps per second
+float MOTOR_SPEED_STEPS = 10240; // steps per second
 int MICROSTEPS = 256;
 
 // Define the stepper and the pins it will use
