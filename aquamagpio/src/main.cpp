@@ -41,23 +41,23 @@ void process_command(){
 
     String command = Serial.readStringUntil('\n');  // Read the input string
     command.toLowerCase();
-    Serial.println("---------");
+    Serial.println(F("---------"));
     Serial.println(command);
-    Serial.println("---------");
+    Serial.println(F("---------"));
 
     // Check for 'STOP' command
-    if (command.equals("stop")) {
+    if (command.equals(F("stop"))) {
       stop_motor(&stepper);
 
     }
 
     // Check for 'Print' command
-    else if (command.equals("print")) {
+    else if (command.equals(F("print"))) {
       print_debug_log(&stepper, &driver);
     }
 
     // Check for 'START' command
-    else if (command.equals("start")) {
+    else if (command.equals(F("start"))) {
       //Serial.println("Enter speed in mm/sec: ");
       //wait_for_input();
       command = Serial.readStringUntil('\n');
@@ -70,42 +70,47 @@ void process_command(){
     }
 
     // Check for 'SPEED' command
-    else if (command.startsWith("speed")) {
+    else if (command.startsWith(F("speed"))) {
       speed(&stepper, command);
     }
 
     // Check for 'STEPS' command
-    else if (command.startsWith("steps")) {
+    else if (command.startsWith(F("steps"))) {
       steps(&stepper, command);
     }
 
     // Check for 'MOVE' command
-    else if (command.startsWith("move")) {
+    else if (command.startsWith(F("move"))) {
       move(&stepper, command);
     }
     //todo fix hardcoded move 0 for proper home command
     // Check for 'HOME' command
-    else if (command.startsWith("home")) {
+    else if (command.startsWith(F("home"))) {
       move(&stepper, "move 0");
     }
 
     //todo fix set home command
     // Check for 'MICRO' command
-    else if (command.startsWith("micro")) {
+    else if (command.startsWith(F("micro"))) {
       set_microsteps(&driver, command);
     }
 
     // Check for 'ANGLE' command
-    else if (command.startsWith("angle")) {
+    else if (command.startsWith(F("angle"))) {
       set_angle(command);
+    }
+
+    // Check for 'PULL' command
+    else if (command.startsWith(F("pull"))) {
+      pull(&stepper, &driver, command);
     }
 
     // todo setCurrentPosition(currentPosition);
     else {
-      Serial.println("Unknown command.");
+      Serial.println(F("Unknown command."));
     }
     print_debug_log(&stepper, &driver);
-    Serial.print("Free memory: "); Serial.println(freeMemory());
+    Serial.print(F("Free memory: ")); Serial.println(freeMemory());
 }
 
 void loop() {
@@ -119,7 +124,7 @@ void loop() {
 
   if(homeLimitSwitch.isPressed()) {
     #ifdef DEBUG
-          Serial.println("Home limit is pressed.");
+          Serial.println(F("Home limit is pressed."));
     #endif
     stop_motor(&stepper); //if home motor is
     CURRENT_STATE = HOME_LIMIT;
@@ -127,19 +132,11 @@ void loop() {
 
   if(endLimitSwitch.isPressed()) {
     #ifdef DEBUG
-          Serial.println("End limit is pressed.");
+          Serial.println(F("End limit is pressed."));
     #endif
     stop_motor(&stepper); //if home motor is
     CURRENT_STATE = END_LIMIT;
   }
-
-
-
-  // int state = limitSwitch.getState();
-  // if(state == HIGH)
-  //   Serial.println("The limit switch: UNTOUCHED");
-  // else
-  //   Serial.println("The limit switch: TOUCHED");
 
   switch (CURRENT_STATE) {
 
@@ -151,7 +148,7 @@ void loop() {
           stepper.setCurrentPosition(0);
 
           #ifdef DEBUG
-          Serial.println("Home limit is released.");
+          Serial.println(F("Home limit is released."));
           #endif
         }
       break;
@@ -163,7 +160,7 @@ void loop() {
         stop_motor(&stepper);
 
         #ifdef DEBUG
-        Serial.println("End limit is released.");
+        Serial.println(F("End limit is released."));
         #endif
       }
       break;
