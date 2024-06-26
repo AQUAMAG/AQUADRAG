@@ -1,4 +1,3 @@
-// motor_functions.h
 #ifndef MOTOR_FUNCTIONS_H
 #define MOTOR_FUNCTIONS_H
 #include "globals.h"

@@ -1,7 +1,11 @@
 #ifndef MOTOR_COMMANDS_H
 #define MOTOR_COMMANDS_H
+
+#include "globals.h"
 #include "motor_functions.h"
 #include "user_inputs.h"
+
+
 void stop_motor(AccelStepper* stepper) {
   //reset_direction(stepper);
   stepper->stop();
