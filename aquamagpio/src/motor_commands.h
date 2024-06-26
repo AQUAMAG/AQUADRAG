@@ -101,4 +101,20 @@ void set_microsteps(TMC2209Stepper* driver, String command) {
     Serial.println("Invalid command format. Use 'MICRO <Microstep value>'.");
   }
 }
+
+void set_angle(String command) {
+  int indexOfSpace = command.indexOf(' ');
+  if (indexOfSpace != -1) {
+    String angleString = command.substring(indexOfSpace + 1);
+    float angleValue = angleString.toDouble();
+    if (angleValue != 0.0 || angleString == "0" || angleString == "0.0") {
+      THETA = angleValue;
+    } else {
+      Serial.print(angleString);
+      Serial.println(" is an invalid angle value.");
+    }
+  } else {
+    Serial.println("Invalid command format. Use 'ANGLE <value>'.");
+  }
+}
 #endif

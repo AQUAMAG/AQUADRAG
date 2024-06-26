@@ -29,6 +29,7 @@ void setup() {
   digitalWrite(ENABLE_PIN, LOW); // Enable the stepper motor
 
   print_debug_log(&stepper, &driver);
+
   stop_motor(&stepper);
 }
 
@@ -93,11 +94,18 @@ void process_command(){
     else if (command.startsWith("micro")) {
       set_microsteps(&driver, command);
     }
+
+    // Check for 'ANGLE' command
+    else if (command.startsWith("angle")) {
+      set_angle(command);
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println("Unknown command.");
     }
     print_debug_log(&stepper, &driver);
+    Serial.print("Free memory: "); Serial.println(freeMemory());
 }
 
 void loop() {
