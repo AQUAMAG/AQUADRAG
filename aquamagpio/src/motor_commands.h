@@ -22,6 +22,15 @@ void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
   print_debug_log(stepper, driver);
 }
 
+
+void home_motor(){
+   MICROSTEPS = driver.microsteps(); //Get current microsteps
+      driver.microsteps(0); //Set driver microsteps to 0 AT THIS MOMENT GLOBAL VARIABLE IS NOT UPDATED!
+      set_speed_mm_per_second(&stepper, -5.0); //set motor speed to 15 mm/s for quick homing
+      start_motor(&stepper, &driver);
+}
+
+
 //todo fix speed to take in just a number or full command
 void speed(AccelStepper* stepper, String command) {
   //Serial.println(command);
