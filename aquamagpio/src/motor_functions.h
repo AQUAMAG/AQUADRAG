@@ -13,6 +13,19 @@ float get_peel_angle() {
   return 180.0 - THETA;
 }
 
+float degrees_to_radians(float degrees) {
+  return degrees * PI / 180.0;
+}
+
+float radians_to_degrees(float radians) {
+  return radians * 180.0 / PI;
+}
+
+float get_peel_speed() {
+  float actuator_speed = steps_to_mm(MOTOR_SPEED_STEPS);
+  return actuator_speed / (1 + cos(degrees_to_radians(THETA)));
+}
+
 void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.println(F("---------"));
   Serial.print(F("Position           : ")); Serial.println(stepper->currentPosition());
@@ -20,6 +33,7 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   Serial.print(F("Motor speed actual : ")); Serial.print(stepper->speed());               Serial.println(F(" (steps/sec)"));
   Serial.print(F("Motor speed global : ")); Serial.print(MOTOR_SPEED_STEPS);              Serial.println(F(" (steps/sec)"));
   Serial.print(F("Actuator speed     : ")); Serial.print(steps_to_mm(MOTOR_SPEED_STEPS)); Serial.println(F(" (mm/sec)"));
+  Serial.print(F("Pull     speed     : ")); Serial.print(get_peel_speed()); Serial.println(F(" (mm/sec)"));
   Serial.print(F("Current            : ")); Serial.print(driver->rms_current());          Serial.println(F(" (mA)"));
   Serial.print(F("Microsteps global  : ")); Serial.println(MICROSTEPS);
   Serial.print(F("Microsteps driver  : ")); Serial.println(driver->microsteps());
@@ -38,14 +52,6 @@ void print_debug_log(AccelStepper* stepper, TMC2209Stepper* driver) {
   }
   Serial.println(F("---------"));
   Serial.println(F(" "));
-}
-
-float degrees_to_radians(float degrees) {
-  return degrees * PI / 180.0;
-}
-
-float radians_to_degrees(float radians) {
-  return radians * 180.0 / PI;
 }
 
 void invert_direction(AccelStepper* stepper) {
