@@ -11,6 +11,7 @@ void clearSerialBuffer() {
   }
   Serial.println("Serial buffer cleared.");
 }
+
 // Wait for user input by checking if there is any data available
 // in the serial buffer. If there is no data available, the function
 // will wait until there is data available.
@@ -44,13 +45,13 @@ void process_command(){
 
     // Check for 'STOP' command
     if (command.equals(F("stop"))) {
-      stop_motor(&stepper);
+      stop_motor();
       print_menu();
     }
 
     // Check for 'Print' command
     else if (command.equals(F("print"))) {
-      print_debug_log(&stepper, &driver);
+      print_debug_log();
     }
 
     // Check for 'START' command
@@ -59,16 +60,16 @@ void process_command(){
       //wait_for_input();
       command = Serial.readStringUntil('\n');
       Serial.println(command);
-      speed(&stepper, command);
+      speed(command);
       //todo make direction do something
       // Serial.println("Enter direction (fwd/back): ");
       // wait_for_input();
-      start_motor(&stepper, &driver);
+      start_motor();
     }
 
     // Check for 'SPEED' command
     else if (command.startsWith(F("speed"))) {
-      speed(&stepper, command);
+      speed(command);
     }
 
     // Check for 'CURRENT' command
@@ -78,12 +79,12 @@ void process_command(){
 
     // Check for 'STEPS' command
     else if (command.startsWith(F("steps"))) {
-      steps(&stepper, command);
+      steps(command);
     }
 
     // Check for 'MOVE' command
     else if (command.startsWith(F("move"))) {
-      move(&stepper, command);
+      move(command);
     }
 
 
@@ -94,7 +95,7 @@ void process_command(){
 
     // Check for 'MICRO' command
     else if (command.startsWith(F("micro"))) {
-      set_microsteps(&driver, command);
+      set_microsteps(command);
     }
 
     // Check for 'ANGLE' command
@@ -104,14 +105,14 @@ void process_command(){
 
     // Check for 'PULL' command
     else if (command.startsWith(F("pull"))) {
-      pull(&stepper, &driver, command);
+      pull(command);
     }
 
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println(F("Unknown command."));
     }
-    print_debug_log(&stepper, &driver);
+    print_debug_log();
 }
 
 #endif

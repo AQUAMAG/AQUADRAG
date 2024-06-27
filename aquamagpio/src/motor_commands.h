@@ -55,7 +55,7 @@ void set_current(String command) {
         String currentString = command.substring(indexOfSpace + 1);
         uint16_t currentValue = static_cast<uint16_t>(currentString.toInt());
         if (currentValue != 0.0 || currentString == "0" || currentString == "0.0") {
-          driver.rms_current(currentValue);
+          DRIVER.rms_current(currentValue);
         } else {
           Serial.print(currentString);
           Serial.println(F(" is an invalid current value."));
