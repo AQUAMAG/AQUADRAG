@@ -3,7 +3,6 @@
 
 #include "globals.h"
 #include "motor_functions.h"
-#include "user_inputs.h"
 
 
 void stop_motor(AccelStepper* stepper) {
@@ -11,7 +10,7 @@ void stop_motor(AccelStepper* stepper) {
   stepper->stop();
   CURRENT_STATE = STOPPED;
   Serial.println(F("Motor stopped."));
-  print_menu();
+
 }
 
 void start_motor(AccelStepper* stepper, TMC2209Stepper* driver) {
@@ -46,6 +45,24 @@ void speed(AccelStepper* stepper, String command) {
         }
       } else {
         Serial.println(F("Invalid command format. Use 'SPEED <value>'."));
+    }
+}
+
+
+void set_current(String command) {
+  //Serial.println(command);
+  int indexOfSpace = command.indexOf(' ');
+      if (indexOfSpace != -1) {
+        String currentString = command.substring(indexOfSpace + 1);
+        uint16_t currentValue = static_cast<uint16_t>(currentString.toInt());
+        if (currentValue != 0.0 || currentString == "0" || currentString == "0.0") {
+          driver.rms_current(currentValue);
+        } else {
+          Serial.print(currentString);
+          Serial.println(F(" is an invalid current value."));
+        }
+      } else {
+        Serial.println(F("Invalid command format. Use 'current <value in mA>'"));
     }
 }
 
