@@ -48,26 +48,27 @@ enum MotorState {
 MotorState CURRENT_STATE = STOPPED;
 
 
-constexpr float full_steps_per_rotation = 200.0;
-constexpr float mm_per_rotation = 5.0;
+constexpr float FULL_STEPS_PER_ROTATION = 200.0;
+constexpr float MM_PER_ROTATION = 5.0;
 constexpr long MAX_SPEED = 10240.0; // steps per second when actuator is moving at 1 mm/s with 256 microsteps 
 
 long get_steps_per_rotation() {
   long steps;
-  if(DRIVER.microsteps() == 0) {
-    steps = 200;
+  uint16_t microsteps = DRIVER.microsteps();
+  if(microsteps == 0) {
+    steps = FULL_STEPS_PER_ROTATION;
   } else {
-    steps = full_steps_per_rotation * DRIVER.microsteps();
+    steps = FULL_STEPS_PER_ROTATION * microsteps;
   }
   return steps;
 }
 
 float mm_to_steps(float mm) {
-  return mm * static_cast<float>(get_steps_per_rotation()) / mm_per_rotation;
+  return mm * static_cast<float>(get_steps_per_rotation()) / MM_PER_ROTATION;
 }
 
 float steps_to_mm(float steps) {
-  return steps * mm_per_rotation / static_cast<float>(get_steps_per_rotation());
+  return steps * MM_PER_ROTATION / static_cast<float>(get_steps_per_rotation());
 }
 
 bool is_valid_microsteps(int n) {
