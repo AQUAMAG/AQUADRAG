@@ -108,6 +108,16 @@ void process_command(){
       pull(command);
     }
 
+    // Check for 'NUDGE' command
+    else if (command.startsWith(F("nudge"))) {
+      nudge_mm(command);
+    }
+
+    // Check for 'MM' command
+    else if (command.startsWith(F("mm"))) {
+      move_mm(command);
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println(F("Unknown command."));
