@@ -1,5 +1,5 @@
 #include "globals.h"
-#include "motor_commands.h"
+#include "user_inputs.h"
 
 void setup() {
   homeLimitSwitch.setDebounceTime(50); // set debounce time to 50 milliseconds
@@ -14,8 +14,7 @@ void setup() {
   // Enable the microPlyer feature
   driver.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
   driver.microsteps(MICROSTEPS); // Set microstepping resolution to 16
-  //driver.rms_current(1000); // Set the current limit in mA
-
+  
   
   // Set the maximum speed and acceleration
   stepper.setMaxSpeed(MAX_SPEED);
@@ -34,81 +33,7 @@ void setup() {
 
 
 
-void process_command(){
 
-    verify_UART_connection();
-
-    String command = Serial.readStringUntil('\n');  // Read the input string
-    command.toLowerCase();
-    Serial.println(F("---------"));
-    Serial.println(command);
-    Serial.println(F("---------"));
-
-    // Check for 'STOP' command
-    if (command.equals(F("stop"))) {
-      stop_motor(&stepper);
-
-    }
-
-    // Check for 'Print' command
-    else if (command.equals(F("print"))) {
-      print_debug_log(&stepper, &driver);
-    }
-
-    // Check for 'START' command
-    else if (command.equals(F("start"))) {
-      //Serial.println("Enter speed in mm/sec: ");
-      //wait_for_input();
-      command = Serial.readStringUntil('\n');
-      Serial.println(command);
-      speed(&stepper, command);
-      //todo make direction do something
-      // Serial.println("Enter direction (fwd/back): ");
-      // wait_for_input();
-      start_motor(&stepper, &driver);
-    }
-
-    // Check for 'SPEED' command
-    else if (command.startsWith(F("speed"))) {
-      speed(&stepper, command);
-    }
-
-    // Check for 'STEPS' command
-    else if (command.startsWith(F("steps"))) {
-      steps(&stepper, command);
-    }
-
-    // Check for 'MOVE' command
-    else if (command.startsWith(F("move"))) {
-      move(&stepper, command);
-    }
-    //todo fix hardcoded move 0 for proper home command
-    // Check for 'HOME' command
-    else if (command.startsWith(F("home"))) {
-      home_motor();
-    }
-
-    // Check for 'MICRO' command
-    else if (command.startsWith(F("micro"))) {
-      set_microsteps(&driver, command);
-    }
-
-    // Check for 'ANGLE' command
-    else if (command.startsWith(F("angle"))) {
-      set_angle(command);
-    }
-
-    // Check for 'PULL' command
-    else if (command.startsWith(F("pull"))) {
-      pull(&stepper, &driver, command);
-    }
-
-    // todo setCurrentPosition(currentPosition);
-    else {
-      Serial.println(F("Unknown command."));
-    }
-    print_debug_log(&stepper, &driver);
-}
 
 void loop() {
   if (Serial.available() > 0) {
@@ -148,6 +73,7 @@ void loop() {
           #ifdef DEBUG
           Serial.println(F("Home limit is released."));
           #endif
+          print_menu();
         }
       break;
 
@@ -160,6 +86,7 @@ void loop() {
         #ifdef DEBUG
         Serial.println(F("End limit is released."));
         #endif
+        print_menu();
       }
       break;
 
