@@ -2,6 +2,7 @@
 #define GLOBALS_H
 #include <AccelStepper.h>
 #include <ezButton.h>
+#include <math.h>
 #include <SoftwareSerial.h>
 #include <TMCStepper.h>
 
@@ -24,7 +25,7 @@ ezButton homeLimitSwitch(10); // Home limit switch attached to pin 9
 ezButton endLimitSwitch(9); // End limit switch attached to pin 10;
 
 // Create an AccelStepper object
-AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
+AccelStepper STEPPER(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 
 // Create a SoftwareSerial object for UART communication
 SoftwareSerial UART(RX_PIN, TX_PIN); // RX, TX
@@ -32,7 +33,7 @@ SoftwareSerial UART(RX_PIN, TX_PIN); // RX, TX
 #define driverA_ADDRESS 0b00 //Pins MS1 and MS2 connected to GND.
 
 // Create a TMC2209Stepper object
-TMC2209Stepper driver = TMC2209Stepper(&UART, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
+TMC2209Stepper DRIVER(&UART, static_cast<double>(0.11), driverA_ADDRESS); // Use SoftwareSerial
 
 
 
@@ -49,20 +50,14 @@ MotorState CURRENT_STATE = STOPPED;
 
 constexpr float full_steps_per_rotation = 200.0;
 constexpr float mm_per_rotation = 5.0;
-constexpr long MAX_SPEED = 10240.0; // steps per second when actuator is moving at 1 mm/s with 256 microsteps
-
-const char DEBUG_HOME_LIMIT[]       PROGMEM = "HOME_LIMIT";   
-const char DEBUG_END_LIMIT[]        PROGMEM = "END_LIMIT";    
-const char DEBUG_RUNNING[]          PROGMEM = "RUNNING";      
-const char DEBUG_MOVE_POSITION[]    PROGMEM = "MOVE_POSITION";
-const char DEBUG_STOPPED[]          PROGMEM = "STOPPED";      
+constexpr long MAX_SPEED = 10240.0; // steps per second when actuator is moving at 1 mm/s with 256 microsteps 
 
 long get_steps_per_rotation() {
   long steps;
-  if(driver.microsteps() == 0) {
+  if(DRIVER.microsteps() == 0) {
     steps = 200;
   } else {
-    steps = full_steps_per_rotation * driver.microsteps();
+    steps = full_steps_per_rotation * DRIVER.microsteps();
   }
   return steps;
 }
@@ -87,6 +82,61 @@ bool is_valid_microsteps(int n) {
         }
     }
     return false;
+}
+
+int get_free_memory() {
+  extern int __heap_start, *__brkval;
+  int v;
+  return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+}
+
+float get_peel_angle() {
+  return 180.0 - THETA;
+}
+
+float degrees_to_radians(float degrees) {
+  return degrees * PI / 180.0;
+}
+
+float radians_to_degrees(float radians) {
+  return radians * 180.0 / PI;
+}
+
+float get_peel_speed() {
+  float actuator_speed = steps_to_mm(MOTOR_SPEED_STEPS);
+  return actuator_speed / (1 + cos(degrees_to_radians(THETA)));
+}
+
+float get_actuator_speed() {
+  return steps_to_mm(MOTOR_SPEED_STEPS);
+}
+
+void print_debug_log() {
+  Serial.println(F("---------"));
+  Serial.print(F("Position           : ")); Serial.println(STEPPER.currentPosition());
+  Serial.print(F("Target             : ")); Serial.println(STEPPER.targetPosition());
+  Serial.print(F("Motor speed actual : ")); Serial.print(STEPPER.speed());             Serial.println(F(" (steps/sec)"));
+  Serial.print(F("Motor speed global : ")); Serial.print(MOTOR_SPEED_STEPS);           Serial.println(F(" (steps/sec)"));
+  Serial.print(F("Actuator speed     : ")); Serial.print(get_actuator_speed());        Serial.println(F(" (mm/sec)"));
+  Serial.print(F("Pull     speed     : ")); Serial.print(get_peel_speed());            Serial.println(F(" (mm/sec)"));
+  Serial.print(F("Current            : ")); Serial.print(DRIVER.rms_current());        Serial.println(F(" (mA)"));
+  Serial.print(F("Microsteps global  : ")); Serial.println(MICROSTEPS);
+  Serial.print(F("Microsteps driver  : ")); Serial.println(DRIVER.microsteps());
+  Serial.print(F("Max speed          : ")); Serial.println(MAX_SPEED);
+  Serial.print(F("Block angle        : ")); Serial.print(THETA);                       Serial.println(F(" (degrees)"));
+  Serial.print(F("Peel  angle        : ")); Serial.print(get_peel_angle());            Serial.println(F(" (degrees)"));
+  Serial.print(F("Free memory        : ")); Serial.print(get_free_memory());           Serial.println(F(" (bytes)"));
+  Serial.print(F("Driver version     : ")); Serial.println(DRIVER.version(), HEX);
+  Serial.print(F("State              : "));
+  switch (CURRENT_STATE) {
+    case HOME_LIMIT:    Serial.println(F("HOME_LIMIT"   )); break;
+    case END_LIMIT:     Serial.println(F("END_LIMIT"    )); break;
+    case RUNNING:       Serial.println(F("RUNNING"      )); break;
+    case MOVE_POSITION: Serial.println(F("MOVE_POSITION")); break;
+    case STOPPED:       Serial.println(F("STOPPED"      )); break;
+  }
+  Serial.println(F("---------"));
+  Serial.println(F(" "));
 }
 
 #endif
