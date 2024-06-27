@@ -156,4 +156,22 @@ void pull(String command) {
     Serial.println(F("Invalid command format. Use 'PULL <value>'."));
   }
 }
+
+void correct() {
+  int max_steps_per_second = 1000;
+  float mm_per_sec = get_actuator_speed();
+  const int valid_values[] = {0, 2, 4, 8, 16, 64, 128, 256};
+  const int size = sizeof(valid_values) / sizeof(valid_values[0]);
+  MICROSTEPS = valid_values[size-1];
+  DRIVER.microsteps(MICROSTEPS);
+  set_speed_mm_per_second(mm_per_sec);
+  for(int i = size - 2; i >= 0; i--) {
+    if(MOTOR_SPEED_STEPS > max_steps_per_second) {
+      MICROSTEPS = valid_values[i];
+      DRIVER.microsteps(MICROSTEPS);
+      set_speed_mm_per_second(mm_per_sec);
+    }
+  }
+  return;
+}
 #endif

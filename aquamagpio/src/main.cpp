@@ -14,7 +14,7 @@ void setup() {
   // Enable the microPlyer feature
   DRIVER.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
  // DRIVER.pwm_autoscale(true); //not sure what this does
-  DRIVER.microsteps(MICROSTEPS); // Set microstepping resolution to 16
+  DRIVER.microsteps(MICROSTEPS);
   DRIVER.rms_current(1800); // Set the current limit in mA
 
 
@@ -47,7 +47,7 @@ void loop() {
     #ifdef DEBUG
           Serial.println(F("Home limit is pressed."));
     #endif
-    stop_motor(); //if home motor is
+    stop_motor();
     CURRENT_STATE = HOME_LIMIT;
   }
 
@@ -55,7 +55,7 @@ void loop() {
     #ifdef DEBUG
           Serial.println(F("End limit is pressed."));
     #endif
-    stop_motor(); //if home motor is
+    stop_motor();
     CURRENT_STATE = END_LIMIT;
   }
 

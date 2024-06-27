@@ -108,6 +108,11 @@ void process_command(){
       pull(command);
     }
 
+    // Check for 'CORRECT' command
+    else if (command.startsWith(F("correct"))) {
+      correct();
+    }
+
     // todo setCurrentPosition(currentPosition);
     else {
       Serial.println(F("Unknown command."));
