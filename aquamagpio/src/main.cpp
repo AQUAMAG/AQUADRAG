@@ -13,8 +13,9 @@ void setup() {
 
   // Enable the microPlyer feature
   DRIVER.en_spreadCycle(false); // Disable spreadCycle to enable StealthChop (which uses microPlyer)
+ // DRIVER.pwm_autoscale(true); //not sure what this does
   DRIVER.microsteps(MICROSTEPS); // Set microstepping resolution to 16
-  //DRIVER.rms_current(1000); // Set the current limit in mA
+  DRIVER.rms_current(1800); // Set the current limit in mA
 
 
   // Set the maximum speed and acceleration

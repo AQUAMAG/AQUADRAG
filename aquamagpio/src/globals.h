@@ -10,7 +10,7 @@
 
 float THETA = 0.0;
 
-float MOTOR_SPEED_STEPS = 10240; // steps per second
+float MOTOR_SPEED_STEPS = 102400; // steps per second
 int MICROSTEPS = 256;
 
 // Define the stepper and the pins it will use
@@ -102,13 +102,12 @@ float radians_to_degrees(float radians) {
   return radians * 180.0 / PI;
 }
 
-float get_peel_speed() {
-  float actuator_speed = steps_to_mm(MOTOR_SPEED_STEPS);
-  return actuator_speed / (1 + cos(degrees_to_radians(THETA)));
-}
-
 float get_actuator_speed() {
   return steps_to_mm(MOTOR_SPEED_STEPS);
+}
+
+float get_peel_speed() {
+  return (get_actuator_speed() / (1 + cos(degrees_to_radians(THETA))));
 }
 
 void print_debug_log() {

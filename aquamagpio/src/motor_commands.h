@@ -24,7 +24,7 @@ void start_motor() {
 void home_motor(){
    MICROSTEPS = DRIVER.microsteps(); //Get current microsteps
       DRIVER.microsteps(0); //Set driver microsteps to 0 AT THIS MOMENT GLOBAL VARIABLE IS NOT UPDATED!
-      set_speed_mm_per_second(-5.0); //set motor speed to 15 mm/s for quick homing
+      set_speed_mm_per_second(-10.0); //set motor speed to 15 mm/s for quick homing
       start_motor();
 }
 
@@ -54,7 +54,7 @@ void set_current(String command) {
       if (indexOfSpace != -1) {
         String currentString = command.substring(indexOfSpace + 1);
         uint16_t currentValue = static_cast<uint16_t>(currentString.toInt());
-        if (currentValue != 0.0 || currentString == "0" || currentString == "0.0") {
+        if (currentValue > 0.0) {
           DRIVER.rms_current(currentValue);
         } else {
           Serial.print(currentString);

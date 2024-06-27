@@ -72,10 +72,10 @@ void process_command(){
       speed(command);
     }
 
-    // Check for 'CURRENT' command
-    else if (command.startsWith(F("current"))) {
-      set_current(command);
-    }
+    // // Check for 'CURRENT' command
+    // else if (command.startsWith(F("current"))) {
+    //   set_current(command);
+    // }
 
     // Check for 'STEPS' command
     else if (command.startsWith(F("steps"))) {
