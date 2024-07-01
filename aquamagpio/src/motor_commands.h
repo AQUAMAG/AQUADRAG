@@ -171,6 +171,7 @@ void correct() {
     }
   }
   return;
+}
   
 void move_mm(String command) {
   int indexOfSpace = command.indexOf(' ');
