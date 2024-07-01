@@ -90,7 +90,6 @@ void move(String command) {
       move_to(position);
       Serial.println(F("new position to move to is: "));
       Serial.println(position);
-      // stepper.setSpeed(motor_speed);
   } else {
       Serial.println(F("Invalid command format. Use 'MOVE <value>'."));
     }
@@ -157,6 +156,7 @@ void pull(String command) {
   }
 }
 
+\
 void correct() {
   int max_steps_per_second = 1000;
   float mm_per_sec = get_actuator_speed();
@@ -171,5 +171,37 @@ void correct() {
     }
   }
   return;
+  
+void move_mm(String command) {
+  int indexOfSpace = command.indexOf(' ');
+  if (indexOfSpace != -1) {
+    String distanceString = command.substring(indexOfSpace + 1);
+    float distanceValue = distanceString.toFloat();
+    if (distanceValue != 0.0 || distanceString == "0" || distanceString == "0.0") {
+      move_to(mm_to_steps(distanceValue));
+    } else {
+      Serial.print(distanceString);
+      Serial.println(F(" is an invalid mm value."));
+    }
+  } else {
+    Serial.println(F("Invalid command format. Use 'MM <value>'."));
+  }
+}
+
+void nudge_mm(String command) {
+  int indexOfSpace = command.indexOf(' ');
+  if (indexOfSpace != -1) {
+    String distanceString = command.substring(indexOfSpace + 1);
+    float distanceValue = distanceString.toFloat();
+    if (distanceValue != 0.0 || distanceString == "0" || distanceString == "0.0") {
+      float steps = mm_to_steps(distanceValue);
+      move_to(STEPPER.currentPosition() + steps);
+    } else {
+      Serial.print(distanceString);
+      Serial.println(F(" is an invalid nudge value."));
+    }
+  } else {
+    Serial.println(F("Invalid command format. Use 'nudge <value>'."));
+  }
 }
 #endif
