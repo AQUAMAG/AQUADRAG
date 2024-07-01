@@ -117,8 +117,8 @@ void print_debug_log() {
   Serial.print(F("Target             : ")); Serial.println(STEPPER.targetPosition());
   Serial.print(F("Motor speed actual : ")); Serial.print(STEPPER.speed());             Serial.println(F(" (steps/sec)"));
   Serial.print(F("Motor speed global : ")); Serial.print(MOTOR_SPEED_STEPS);           Serial.println(F(" (steps/sec)"));
-  Serial.print(F("Actuator speed     : ")); Serial.print(get_actuator_speed());        Serial.println(F(" (mm/sec)"));
-  Serial.print(F("Pull     speed     : ")); Serial.print(get_peel_speed());            Serial.println(F(" (mm/sec)"));
+  Serial.print(F("Actuator speed     : ")); Serial.print(get_actuator_speed(), 4);        Serial.println(F(" (mm/sec)"));
+  Serial.print(F("Pull     speed     : ")); Serial.print(get_peel_speed(), 4);            Serial.println(F(" (mm/sec)"));
   Serial.print(F("Current            : ")); Serial.print(DRIVER.rms_current());        Serial.println(F(" (mA)"));
   Serial.print(F("Microsteps global  : ")); Serial.println(MICROSTEPS);
   Serial.print(F("Microsteps driver  : ")); Serial.println(DRIVER.microsteps());
