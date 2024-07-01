@@ -156,7 +156,7 @@ void pull(String command) {
   }
 }
 
-\
+
 void correct() {
   int max_steps_per_second = 1000;
   float mm_per_sec = get_actuator_speed();
