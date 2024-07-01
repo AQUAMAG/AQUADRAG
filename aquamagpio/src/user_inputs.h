@@ -108,6 +108,9 @@ void process_command(){
       pull(command);
     }
 
+    // Check for 'CORRECT' command
+    else if (command.startsWith(F("correct"))) {
+      correct();
     // Check for 'NUDGE' command
     else if (command.startsWith(F("nudge"))) {
       nudge_mm(command);

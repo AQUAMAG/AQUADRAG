@@ -156,6 +156,22 @@ void pull(String command) {
   }
 }
 
+\
+void correct() {
+  int max_steps_per_second = 1000;
+  float mm_per_sec = get_actuator_speed();
+  const int valid_values[] = {0, 2, 4, 8, 16, 64, 128, 256};
+  const int size = sizeof(valid_values) / sizeof(valid_values[0]);
+  for(int i = size - 1; i >= 0; i--) {
+    MICROSTEPS = valid_values[i];
+    DRIVER.microsteps(MICROSTEPS);
+    set_speed_mm_per_second(mm_per_sec);
+    if(MOTOR_SPEED_STEPS <= max_steps_per_second) {
+      break;
+    }
+  }
+  return;
+  
 void move_mm(String command) {
   int indexOfSpace = command.indexOf(' ');
   if (indexOfSpace != -1) {
