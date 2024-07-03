@@ -124,9 +124,18 @@ void process_command(){
 
     // todo setCurrentPosition(currentPosition);
     else {
-      Serial.println(F("Unknown command."));
+      Serial.println(F("UNKNOWN COMMAND"));
+      Serial.println(F("     _____"));
+      Serial.println(F("    /     \\"));
+      Serial.println(F("   | () () |"));
+      Serial.println(F("    \\  ^  /"));
+      Serial.println(F("     |||||"));
+      Serial.println(F("     |||||"));
+      
+      return;
     }
     print_debug_log();
+    return;
 }
 
 #endif
